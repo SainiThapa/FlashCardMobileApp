@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="FlashCardMobileApp.Views.LoginPage"
+             BackgroundColor="#FFDEE9"
+             Shell.NavBarIsVisible="False">
+
+    <StackLayout Padding="30" Spacing="20" VerticalOptions="Center">
+
+        <Label Text="Welcome Back!" FontSize="24" FontAttributes="Bold" TextColor="#333" HorizontalOptions="Center" />
+
+        <Frame CornerRadius="10" Padding="5" BackgroundColor="White">
+            <Entry x:Name="EmailEntry" Placeholder="Email" PlaceholderColor="Gray" FontSize="18" TextColor="Black" />
+        </Frame>
+
+        <Frame CornerRadius="10" Padding="5" BackgroundColor="White">
+            <Entry x:Name="PasswordEntry" Placeholder="Password" PlaceholderColor="Gray" FontSize="18" TextColor="Black" IsPassword="True" />
+        </Frame>
+
+        <Button Text="Login" Clicked="OnLoginClicked" BackgroundColor="#FF6F61" TextColor="White" FontSize="18" CornerRadius="25" HeightRequest="50" />
+
+        <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+            <Label Text="Don't have an account? " TextColor="#555" FontSize="14" />
+            <Label Text="Register" TextColor="#FF6F61" FontAttributes="Bold" FontSize="14">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding RegisterCommand}" />
+                </Label.GestureRecognizers>
+            </Label>
+        </StackLayout>
+
+    </StackLayout>
+</ContentPage>

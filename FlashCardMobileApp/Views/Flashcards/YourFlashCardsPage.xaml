@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FlashCardMobileApp.Views.Flashcards.YourFlashCardsPage"
+             BackgroundColor="#F5F5F5">
+
+    <StackLayout Padding="20" Spacing="15">
+
+        <!-- Bulk Delete Button -->
+        <Button Text="Delete Selected" Command="{Binding BulkDeleteFlashcardsCommand}"
+                BackgroundColor="#D32F2F" TextColor="White" CornerRadius="10" HeightRequest="50"/>
+
+        <!-- Flashcards List -->
+        <CollectionView ItemsSource="{Binding Flashcards}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame BackgroundColor="White" CornerRadius="10" Padding="15" Margin="5">
+                        <StackLayout>
+
+                            <!-- Category (Top, Bold) -->
+                            <Label Text="{Binding CategoryName}" FontSize="16" FontAttributes="Bold" TextColor="#333"/>
+
+                            <!-- Checkbox for Selection -->
+                            <StackLayout Orientation="Horizontal" HorizontalOptions="Start">
+                                <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay}" />
+                                <Label Text="{Binding Question}" FontSize="18" FontAttributes="Bold" TextColor="#333" VerticalOptions="Center"/>
+                            </StackLayout>
+
+                            <!-- Answer (Bottom, Italic) -->
+                            <Label Text="{Binding Answer}" FontSize="14" FontAttributes="Italic" TextColor="#666" Margin="5,10,5,0"/>
+
+                            <StackLayout Orientation="Horizontal" HorizontalOptions="End" Spacing="10">
+                                <!-- Edit Button -->
+                                <Button Text="Edit" BackgroundColor="#FFA500" TextColor="White" 
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditFlashcardCommand}" 
+                                        CommandParameter="{Binding .}"/>
+
+                                <!-- Delete Button -->
+                                <Button Text="Delete" BackgroundColor="#FF6347" TextColor="White" 
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteFlashcardCommand}" 
+                                        CommandParameter="{Binding .}"/>
+                            </StackLayout>
+
+                        </StackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- Create New Flashcard Button -->
+        <Button Text="Create New Flashcard" Command="{Binding NavigateToCreateCommand}"
+                BackgroundColor="#4CAF50" TextColor="White" CornerRadius="10" HeightRequest="50"/>
+    </StackLayout>
+</ContentPage>

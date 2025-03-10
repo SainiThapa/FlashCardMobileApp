@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FlashCardMobileApp.Views.User.WelcomePage"
+             Title="Welcome to Flashcard App">
+
+    <StackLayout Padding="30" Spacing="20" VerticalOptions="Center" HorizontalOptions="Center">
+
+        <Button Text="View My Flashcards" 
+                Clicked="OnViewFlashcardsClicked"
+                BackgroundColor="#4CAF50"
+                TextColor="White"
+                CornerRadius="10" 
+                WidthRequest="250"/>
+
+        <Button Text="Create New Flashcards" 
+                Clicked="OnCreateFlashcardsClicked"
+                BackgroundColor="#2196F3"
+                TextColor="White"
+                CornerRadius="10"
+                WidthRequest="250"/>
+
+        <Button Text="Random Quiz" 
+                Clicked="OnRandomQuizClicked"
+                BackgroundColor="#FF9800"
+                TextColor="White"
+                CornerRadius="10"
+                WidthRequest="250"/>
+
+    </StackLayout>
+</ContentPage>

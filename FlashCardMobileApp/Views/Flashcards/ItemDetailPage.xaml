@@ -1,0 +1,13 @@
+﻿<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FlashCardMobileApp.Views.Flashcards.ItemDetailPage">
+    <StackLayout Padding="20">
+        <Label Text="Question:" FontAttributes="Bold" />
+        <Label Text="{Binding Flashcard.Question}" />
+        <Label Text="Answer:" FontAttributes="Bold" />
+        <Label Text="{Binding Flashcard.Answer}" />
+        <Label Text="Category:" FontAttributes="Bold" />
+        <Label Text="{Binding Flashcard.Category}" />
+        <Button Text="Edit" Command="{Binding EditCommand}" />
+    </StackLayout>
+</ContentPage>

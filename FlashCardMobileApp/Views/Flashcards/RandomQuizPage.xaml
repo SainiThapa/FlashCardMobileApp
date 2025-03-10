@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FlashCardMobileApp.Views.Flashcards.RandomQuizPage"
+             Title="Random Quiz">
+
+    <StackLayout Padding="20" Spacing="20">
+
+        <!-- Category Dropdown -->
+        <Picker ItemsSource="{Binding Categories}" 
+                ItemDisplayBinding="{Binding Name}" 
+                SelectedItem="{Binding SelectedCategory}"
+                Title="Select Category"
+                TitleColor="DimGray"/>
+
+        <!-- Question Display -->
+        <Frame BackgroundColor="White" CornerRadius="10" Padding="20">
+            <Label Text="{Binding CurrentFlashcard.Question}" 
+                   FontSize="20" 
+                   FontAttributes="Bold" 
+                   TextColor="Black"
+                   HorizontalOptions="Center"/>
+        </Frame>
+
+        <!-- Answer Display -->
+        <Frame BackgroundColor="#E0E0E0" CornerRadius="10" Padding="20" IsVisible="{Binding IsAnswerVisible}">
+            <Label Text="{Binding CurrentFlashcard.Answer}" 
+                   FontSize="18" 
+                   FontAttributes="Italic" 
+                   TextColor="Black"
+                   HorizontalOptions="Center"/>
+        </Frame>
+
+        <!-- Reveal Answer Button -->
+        <Button Text="Reveal Answer" 
+                Command="{Binding RevealAnswerCommand}" 
+                BackgroundColor="#FF9800"
+                TextColor="White"/>
+
+        <!-- Get New Flashcard Button -->
+        <Button Text="Next Question" 
+                Command="{Binding GetNewFlashcardCommand}" 
+                BackgroundColor="#4CAF50"
+                TextColor="White"/>
+
+    </StackLayout>
+</ContentPage>

@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FlashCardMobileApp.Views.Flashcards.EditFlashcardPage"
+             Title="Edit Flashcard">
+
+    <StackLayout Padding="20" Spacing="15">
+
+        <!-- Category Dropdown -->
+        <Label Text="Select Category" FontAttributes="Bold" TextColor="Black"/>
+        <Picker ItemsSource="{Binding Categories}" 
+                ItemDisplayBinding="{Binding Name}" 
+                SelectedItem="{Binding SelectedCategory}"
+                TextColor="Black"
+                Title="Choose a category"
+                TitleColor="DimGray"/>
+
+        <!-- Question Input -->
+        <Label Text="Question" FontAttributes="Bold" TextColor="Black"/>
+        <Entry Text="{Binding Flashcard.Question}" 
+               TextColor="Black" 
+               Placeholder="Enter the question" 
+               PlaceholderColor="DimGray"/>
+
+        <!-- Answer Input -->
+        <Label Text="Answer" FontAttributes="Bold" TextColor="Black"/>
+        <Entry Text="{Binding Flashcard.Answer}" 
+               TextColor="Black" 
+               Placeholder="Enter the answer" 
+               PlaceholderColor="DimGray"/>
+
+        <!-- Buttons -->
+        <StackLayout Orientation="Horizontal" Spacing="10">
+            <Button Text="Save Changes" Command="{Binding SaveCommand}" BackgroundColor="#4CAF50" TextColor="White"/>
+            <Button Text="Cancel" Command="{Binding CancelCommand}" BackgroundColor="#D32F2F" TextColor="White"/>
+        </StackLayout>
+
+    </StackLayout>
+</ContentPage>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Shell xmlns="http://xamarin.com/schemas/2014/forms"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:views="clr-namespace:FlashCardMobileApp.Views"
+       xmlns:userViews="clr-namespace:FlashCardMobileApp.Views.User"
+       xmlns:cardViews="clr-namespace:FlashCardMobileApp.Views.Flashcards"
+       x:Class="FlashCardMobileApp.AppShell">
+
+    <!-- Flyout Header (User Profile Section) -->
+    <Shell.FlyoutHeader>
+        <Grid BackgroundColor="#4CAF50" Padding="20">
+            <StackLayout HorizontalOptions="Center">
+                <Image Source="user_icon.png" WidthRequest="80" HeightRequest="80" HorizontalOptions="Center"/>
+                <Label Text="Welcome, User" FontSize="20" TextColor="White" HorizontalOptions="Center"/>
+            </StackLayout>
+        </Grid>
+    </Shell.FlyoutHeader>
+
+    <!-- Flyout Items -->
+    <FlyoutItem Title="Dashboard" Icon="dashboard.png">
+        <ShellContent Route="WelcomePage" ContentTemplate="{DataTemplate userViews:WelcomePage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="My Profile" Icon="profile.png">
+        <ShellContent Route="ProfilePage" ContentTemplate="{DataTemplate userViews:ProfilePage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="My Flashcards" Icon="flashcards.png">
+        <ShellContent Route="YourFlashCardsPage" ContentTemplate="{DataTemplate cardViews:YourFlashCardsPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Create Flashcard" Icon="create.png">
+        <ShellContent Route="CreateFlashcardPage" ContentTemplate="{DataTemplate cardViews:CreateFlashcardPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Random Quiz" Icon="quiz.png">
+        <ShellContent Route="RandomQuizPage" ContentTemplate="{DataTemplate cardViews:RandomQuizPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Reset Password" Icon="reset.png">
+        <ShellContent Route="ResetPasswordPage" ContentTemplate="{DataTemplate userViews:ResetPasswordPage}" />
+    </FlyoutItem>
+
+    <MenuItem Text="Logout" IconImageSource="logout.png" Clicked="OnLogoutClicked" />
+
+    <!-- Hidden Pages (Registered for Navigation) -->
+    <ShellContent Route="LoginPage" ContentTemplate="{DataTemplate views:LoginPage}" />
+    <ShellContent Route="RegisterPage" ContentTemplate="{DataTemplate views:RegisterPage}" />
+    <ShellContent Route="EditFlashcardPage" ContentTemplate="{DataTemplate cardViews:EditFlashcardPage}" />
+    <ShellContent Route="ItemDetailPage" ContentTemplate="{DataTemplate views:ItemDetailPage}" />
+
+</Shell>

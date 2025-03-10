@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FlashCardMobileApp.Views.ItemDetailPage"
+             Title="Flashcard Details">
+    <StackLayout Padding="20">
+        <Label Text="{Binding Flashcard.Question, StringFormat='Question: {0}'}" />
+        <Label Text="{Binding Flashcard.Answer, StringFormat='Answer: {0}'}" />
+        <Label Text="{Binding Flashcard.Category, StringFormat='Category: {0}'}" />
+    </StackLayout>
+</ContentPage>
