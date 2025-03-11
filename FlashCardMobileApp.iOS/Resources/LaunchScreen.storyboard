@@ -4,7 +4,6 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12042"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
         <scene sceneID="gAE-YM-kbH">
             <objects>
                 <viewController id="X5k-f2-b5h" sceneMemberID="viewController">

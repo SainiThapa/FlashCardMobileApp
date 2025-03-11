@@ -6,7 +6,6 @@
        xmlns:cardViews="clr-namespace:FlashCardMobileApp.Views.Flashcards"
        x:Class="FlashCardMobileApp.AppShell">
 
-    <!-- Flyout Header (User Profile Section) -->
     <Shell.FlyoutHeader>
         <Grid BackgroundColor="#4CAF50" Padding="20">
             <StackLayout HorizontalOptions="Center">
@@ -16,7 +15,6 @@
         </Grid>
     </Shell.FlyoutHeader>
 
-    <!-- Flyout Items -->
     <FlyoutItem Title="Dashboard" Icon="dashboard.png">
         <ShellContent Route="WelcomePage" ContentTemplate="{DataTemplate userViews:WelcomePage}" />
     </FlyoutItem>
@@ -43,7 +41,6 @@
 
     <MenuItem Text="Logout" IconImageSource="logout.png" Clicked="OnLogoutClicked" />
 
-    <!-- Hidden Pages (Registered for Navigation) -->
     <ShellContent Route="LoginPage" ContentTemplate="{DataTemplate views:LoginPage}" />
     <ShellContent Route="RegisterPage" ContentTemplate="{DataTemplate views:RegisterPage}" />
     <ShellContent Route="EditFlashcardPage" ContentTemplate="{DataTemplate cardViews:EditFlashcardPage}" />

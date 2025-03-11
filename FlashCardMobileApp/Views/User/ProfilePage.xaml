@@ -7,7 +7,6 @@
 
     <StackLayout Padding="20" Spacing="20">
 
-        <!-- Profile Header -->
         <Frame BackgroundColor="#4CAF50" CornerRadius="20" Padding="30" HasShadow="True">
             <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
                 <Image Source="user_icon.png" HeightRequest="100" WidthRequest="100" HorizontalOptions="Center"/>
@@ -15,11 +14,9 @@
             </StackLayout>
         </Frame>
 
-        <!-- Profile Card -->
         <Frame BackgroundColor="White" CornerRadius="20" Padding="25" HasShadow="True">
             <StackLayout Spacing="15">
 
-                <!-- Username -->
                 <Label Text="Username" FontAttributes="Bold" FontSize="16" TextColor="#333"/>
                 <Frame BackgroundColor="#E0E0E0" CornerRadius="10" Padding="5">
                     <Entry Text="{Binding Profile.Username}" 
@@ -31,7 +28,6 @@
                            PlaceholderColor="#757575"/>
                 </Frame>
 
-                <!-- Email -->
                 <Label Text="Email" FontAttributes="Bold" FontSize="16" TextColor="#333"/>
                 <Frame BackgroundColor="#E0E0E0" CornerRadius="10" Padding="5">
                     <Entry Text="{Binding Profile.Email}" 
@@ -46,14 +42,11 @@
             </StackLayout>
         </Frame>
 
-        <!-- Action Buttons -->
         <StackLayout Spacing="15">
-            <!-- Edit Button -->
             <Button Text="Edit Profile" Command="{Binding ToggleEditCommand}" 
                     BackgroundColor="#FF9800" TextColor="White" FontSize="18" 
                     IsVisible="{Binding IsNotEditing}" CornerRadius="10"/>
 
-            <!-- Save & Cancel Buttons -->
             <StackLayout Orientation="Horizontal" IsVisible="{Binding IsEditing}" Spacing="15">
                 <Button Text="Save" Command="{Binding SaveCommand}" 
                         BackgroundColor="#4CAF50" TextColor="White" FontSize="18" 
@@ -63,7 +56,6 @@
                         WidthRequest="150" CornerRadius="10"/>
             </StackLayout>
 
-            <!-- Reset Password Button -->
             <Button Text="Reset Password" Command="{Binding ResetPasswordCommand}" 
                     BackgroundColor="#2196F3" TextColor="White" FontSize="18"
                     CornerRadius="10"/>
