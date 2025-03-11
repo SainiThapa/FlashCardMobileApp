@@ -1,0 +1,8 @@
+is_global = true
+build_property.RootNamespace = FlashCardMobileApp
+build_property.ProjectDir = c:\Users\DELL\XAM-Project\FlashCardApp\FlashCardMobileApp\FlashCardMobileApp\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.CsWinRTUseWindowsUIXamlProjections = false
+build_property.EffectiveAnalysisLevelStyle = 
+build_property.EnableCodeStyleSeverity = 
