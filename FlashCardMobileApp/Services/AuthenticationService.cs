@@ -110,5 +110,4 @@ public class AuthenticationService
         return !string.IsNullOrEmpty(token);
     }
 
-
 }

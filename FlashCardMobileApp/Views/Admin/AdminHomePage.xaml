@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Shell xmlns="http://xamarin.com/schemas/2014/forms"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:adminViews="clr-namespace:FlashCardMobileApp.Views.Admin"
+       xmlns:vm="clr-namespace:FlashCardMobileApp.ViewModels.Admin"
+       x:Class="FlashCardMobileApp.Views.Admin.AdminHomePage"
+       FlyoutBehavior="Flyout">
+
+    <Shell.BindingContext>
+        <vm:AdminHomeViewModel />
+    </Shell.BindingContext>
+
+    <!-- Flyout Header -->
+    <Shell.FlyoutHeader>
+        <Grid BackgroundColor="#1976D2" Padding="20">
+            <StackLayout Orientation="Vertical" HorizontalOptions="Center" VerticalOptions="Center">
+                <Image Source="admin_icon.png" HeightRequest="80" WidthRequest="80" HorizontalOptions="Center"/>
+                <Label Text="Admin Panel" FontSize="24" FontAttributes="Bold" TextColor="White" HorizontalOptions="Center"/>
+            </StackLayout>
+        </Grid>
+    </Shell.FlyoutHeader>
+
+    <!-- Content Section -->
+    <ShellContent>
+        <ContentPage>
+            <StackLayout Padding="20" Spacing="20" VerticalOptions="CenterAndExpand" HorizontalOptions="Center">
+                <Label Text="Welcome, Admin!" FontSize="26" FontAttributes="Bold" TextColor="#1976D2"/>
+                <Button Text="View Users" Command="{Binding ViewUsersCommand}" BackgroundColor="#1976D2" TextColor="White" CornerRadius="10" WidthRequest="200" HeightRequest="50"/>
+            </StackLayout>
+        </ContentPage>
+    </ShellContent>
+
+    <!-- Flyout Menu Items -->
+    <FlyoutItem Title="Categories" Icon="categories_icon.png">
+        <ShellContent Route="AdminCategoriesPage" ContentTemplate="{DataTemplate adminViews:AdminCategoriesPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Users" Icon="users_icon.png">
+        <ShellContent Route="AdminUsersPage" ContentTemplate="{DataTemplate adminViews:AdminUsersPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Reset User Passwords" Icon="reset_password_icon.png">
+        <ShellContent Route="AdminResetPasswordsPage" ContentTemplate="{DataTemplate adminViews:AdminResetPasswordsPage}" />
+    </FlyoutItem>
+
+    <MenuItem Text="Logout" Command="{Binding LogoutCommand}" />
+
+</Shell>

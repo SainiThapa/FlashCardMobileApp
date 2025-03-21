@@ -1,7 +1,7 @@
 ﻿using FlashCardMobileApp.Services;
-using FlashCardMobileApp;
 using Xamarin.Forms;
 using System;
+using System.Threading.Tasks;
 
 namespace FlashCardMobileApp
 {
@@ -9,6 +9,7 @@ namespace FlashCardMobileApp
     {
         public static AuthenticationService AuthService { get; } = new AuthenticationService();
         public static ApiService ApiService { get; } = new ApiService();
+
         public App()
         {
             InitializeComponent();
@@ -17,16 +18,39 @@ namespace FlashCardMobileApp
 
         protected override async void OnStart()
         {
-            bool isLoggedIn = await App.AuthService.IsLoggedIn();
-            if (!isLoggedIn)
+            try
             {
-                Console.WriteLine("No valid token, navigating to LoginPage");
-                await Shell.Current.GoToAsync("//LoginPage");
+                bool isLoggedIn = await App.ApiService.IsLoggedIn();
+
+                if (!isLoggedIn)
+                {
+                    Console.WriteLine("No valid token, navigating to LoginPage");
+                    await Shell.Current.GoToAsync("//LoginPage");
+                    return;
+                }
+
+                Console.WriteLine("Valid token found. Checking user role...");
+
+                // Check if the user is Admin
+                bool isAdmin = await App.ApiService.IsAdmin();
+
+                if (isAdmin)
+                {
+                    Console.WriteLine("Admin detected, navigating to AdminHomePage");
+                    (Shell.Current as AppShell)?.SetFlyoutForAdmin(true);
+                    await Shell.Current.GoToAsync("//AdminHomePage");
+                }
+                else
+                {
+                    Console.WriteLine("User detected, navigating to WelcomePage");
+                    (Shell.Current as AppShell)?.SetFlyoutForAdmin(false);
+                    await Shell.Current.GoToAsync("//WelcomePage");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                Console.WriteLine("Valid token found, navigating to Welcomepage");
-                await Shell.Current.GoToAsync("//WelcomePage");
+                Console.WriteLine($"Error during app startup: {ex.Message}");
+                await Shell.Current.GoToAsync("//LoginPage");
             }
         }
     }

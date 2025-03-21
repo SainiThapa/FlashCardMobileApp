@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FlashCardMobileApp.Views.Admin.AdminUsersPage"
+             BackgroundColor="#E3F2FD"
+             Title="Manage Users">
+
+    <StackLayout Padding="30" Spacing="20">
+        <ListView ItemsSource="{Binding Users}" HasUnevenRows="True">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout Orientation="Horizontal" Padding="10">
+                            <Label Text="{Binding Email}" FontSize="18"/>
+                            <Button Text="Delete" Command="{Binding DeleteUserCommand}" CommandParameter="{Binding .}" BackgroundColor="#D32F2F" TextColor="White"/>
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </StackLayout>
+</ContentPage>

@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FlashCardMobileApp.Views.AdminLoginPage"
+             BackgroundColor="#F5F5F5"
+             Title="Admin Login">
+
+    <StackLayout Padding="30" Spacing="20" VerticalOptions="Center">
+
+        <Label Text="Admin Login" FontSize="24" FontAttributes="Bold" TextColor="#333" HorizontalOptions="Center" />
+
+        <Frame CornerRadius="10" Padding="5" BackgroundColor="White">
+            <Entry x:Name="AdminEmailEntry" Placeholder="Admin Email" PlaceholderColor="Gray" FontSize="18" TextColor="Black" />
+        </Frame>
+
+        <Frame CornerRadius="10" Padding="5" BackgroundColor="White">
+            <Entry x:Name="AdminPasswordEntry" Placeholder="Password" PlaceholderColor="Gray" FontSize="18" TextColor="Black" IsPassword="True" />
+        </Frame>
+
+        <Button Text="Login as Admin" Clicked="OnAdminLoginClicked" BackgroundColor="#4CAF50" TextColor="White" FontSize="18" CornerRadius="25" HeightRequest="50" />
+
+        <Button Text="Back to User Login" Clicked="OnBackClicked" BackgroundColor="#FF6F61" TextColor="White" FontSize="18" CornerRadius="25" HeightRequest="50" />
+
+    </StackLayout>
+</ContentPage>

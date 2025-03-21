@@ -4,6 +4,7 @@
        xmlns:views="clr-namespace:FlashCardMobileApp.Views"
        xmlns:userViews="clr-namespace:FlashCardMobileApp.Views.User"
        xmlns:cardViews="clr-namespace:FlashCardMobileApp.Views.Flashcards"
+       xmlns:adminViews="clr-namespace:FlashCardMobileApp.Views.Admin"
        x:Class="FlashCardMobileApp.AppShell">
 
     <Shell.FlyoutHeader>
@@ -45,5 +46,11 @@
     <ShellContent Route="RegisterPage" ContentTemplate="{DataTemplate views:RegisterPage}" />
     <ShellContent Route="EditFlashcardPage" ContentTemplate="{DataTemplate cardViews:EditFlashcardPage}" />
     <ShellContent Route="ItemDetailPage" ContentTemplate="{DataTemplate views:ItemDetailPage}" />
+
+    <ShellContent Route="AdminHomePage" ContentTemplate="{DataTemplate adminViews:AdminHomePage}" />
+    <ShellContent Route="AdminCategoriesPage" ContentTemplate="{DataTemplate adminViews:AdminCategoriesPage}" />
+    <ShellContent Route="AdminUsersPage" ContentTemplate="{DataTemplate adminViews:AdminUsersPage}" />
+    <ShellContent Route="AdminResetPasswordsPage" ContentTemplate="{DataTemplate adminViews:AdminResetPasswordsPage}" />
+
 
 </Shell>

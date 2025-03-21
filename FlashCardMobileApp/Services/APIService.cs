@@ -13,6 +13,11 @@ using Xamarin.Essentials;
 
 namespace FlashCardMobileApp.Services
 {
+    public class TokenResponse
+    {
+        public string Token { get; set; }
+    }
+
     public class ApiService
     {
         private const string TokenKey = "AuthToken";
@@ -60,6 +65,36 @@ namespace FlashCardMobileApp.Services
             }
         }
 
+        public async Task<bool> AdminLoginAsync(string email, string password)
+        {
+            var loginData = new { Email = email, Password = password };
+            var content = new StringContent(JsonConvert.SerializeObject(loginData), Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync("accountapi/admin/login", content);
+
+
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                Debug.WriteLine("Received JSON: " + json);
+                try
+                {
+                    var tokenResponse = JsonConvert.DeserializeObject<TokenResponse>(json);
+                    if (tokenResponse?.Token != null)
+                    {
+                        await SecureStorage.SetAsync("admin_auth_token", tokenResponse.Token);
+                        Debug.WriteLine("ADMIN SUCCESSFUL LOGIN WITH TOKEN");
+                        Debug.WriteLine(tokenResponse.Token);
+                        return true;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Deserialization Error: {ex.Message}");
+                }
+            }
+            return false;
+        }
 
         public async Task<UserProfile> GetUserProfileAsync()
         {
@@ -289,6 +324,134 @@ namespace FlashCardMobileApp.Services
 
             var isValid = await _authService.IsTokenValidAsync();
             Console.WriteLine($"Is Token Valid: {isValid}");
+        }
+
+        public async Task<List<User>> GetUsersAsync()
+        {
+            try
+            {
+                var requestUrl = "adminapi/users";
+                var request = await CreateAuthenticatedRequest(HttpMethod.Get, requestUrl);
+                var response = await _httpClient.SendAsync(request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject<List<User>>(json);
+                }
+                else
+                {
+                    Console.WriteLine($"❌ Failed to fetch users: {response.StatusCode}");
+                    return new List<User>();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"🚨 Exception in GetUsersAsync: {ex.Message}");
+                return new List<User>();
+            }
+        }
+
+        // ➤ Delete user
+        public async Task<bool> DeleteUserAsync(string userId)
+        {
+            try
+            {
+                var requestUrl = $"adminapi/users/{userId}";
+                var request = await CreateAuthenticatedRequest(HttpMethod.Delete, requestUrl);
+                var response = await _httpClient.SendAsync(request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    Console.WriteLine($"✅ User {userId} deleted successfully.");
+                    return true;
+                }
+                else
+                {
+                    var errorMessage = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"❌ Failed to delete user: {errorMessage}");
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"🚨 Exception in DeleteUserAsync: {ex.Message}");
+                return false;
+            }
+        }
+
+        public async Task<bool> BulkDeleteFlashcardsAsync(string userId, List<int> flashcardIds)
+        {
+            try
+            {
+                var requestUrl = $"adminapi/users/{userId}/flashcards/bulk-delete";
+                var request = await CreateAuthenticatedRequest(HttpMethod.Post, requestUrl);
+
+                var json = JsonConvert.SerializeObject(new { FlashcardIds = flashcardIds });
+                request.Content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await _httpClient.SendAsync(request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    Console.WriteLine($"✅ {flashcardIds.Count} flashcards deleted successfully.");
+                    return true;
+                }
+                else
+                {
+                    var errorMessage = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"❌ Failed to delete flashcards: {errorMessage}");
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"🚨 Exception in BulkDeleteFlashcardsAsync: {ex.Message}");
+                return false;
+            }
+        }
+
+        public async Task<bool> AddCategoryAsync(Category category)
+        {
+            var json = JsonConvert.SerializeObject(category);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+
+            var response = await _httpClient.PostAsync("api/adminapi/categories", content);
+            return response.IsSuccessStatusCode;
+        }
+
+        // Delete Category
+        public async Task<bool> DeleteCategoryAsync(int categoryId)
+        {
+            var response = await _httpClient.DeleteAsync($"api/adminapi/categories/{categoryId}");
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> IsAdmin()
+        {
+            try
+            {
+                var token = await SecureStorage.GetAsync("admin_auth_token");
+                if (string.IsNullOrEmpty(token))
+                {
+                    return false;
+                }
+
+                var response = await _httpClient.GetAsync("api/accountapi/is-admin");
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error checking admin status: {ex.Message}");
+                return false;
+            }
+        }
+
+        public async Task<bool> IsLoggedIn()
+        {
+            var token = await SecureStorage.GetAsync("auth_token") ?? await SecureStorage.GetAsync("admin_auth_token");
+            return !string.IsNullOrEmpty(token);
         }
 
 

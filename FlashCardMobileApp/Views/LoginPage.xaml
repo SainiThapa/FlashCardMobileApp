@@ -22,6 +22,9 @@
 
         <Button Text="Login" Clicked="OnLoginClicked" BackgroundColor="#FF6F61" TextColor="White" FontSize="18" CornerRadius="25" HeightRequest="50" />
 
+        <Button Text="Login as Admin" Clicked="OnAdminLoginClicked" BackgroundColor="#2196F3" TextColor="White" FontSize="18" CornerRadius="25" HeightRequest="50" />
+
+
         <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
             <Label Text="Don't have an account? " TextColor="#555" FontSize="14" />
             <Label Text="Register" TextColor="#FF6F61" FontAttributes="Bold" FontSize="14">
