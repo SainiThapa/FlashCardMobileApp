@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FlashCardMobileApp.Services;
+using System;
 using System.Diagnostics;
 using Xamarin.Forms;
 
@@ -6,9 +7,11 @@ namespace FlashCardMobileApp.Views
 {
     public partial class AdminLoginPage : ContentPage
     {
+        private readonly ApiService apiService;
         public AdminLoginPage()
         {
             InitializeComponent();
+            apiService = new ApiService();
         }
 
         private async void OnAdminLoginClicked(object sender, EventArgs e)
@@ -16,7 +19,7 @@ namespace FlashCardMobileApp.Views
             string email = AdminEmailEntry.Text;
             string password = AdminPasswordEntry.Text;
 
-            bool success = await App.ApiService.AdminLoginAsync(email, password);
+            bool success = await apiService.AdminLoginAsync(email, password);
             if (success)
             {
                 Debug.WriteLine("Sucessful login admin");

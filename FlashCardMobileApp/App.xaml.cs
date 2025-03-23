@@ -2,6 +2,8 @@
 using Xamarin.Forms;
 using System;
 using System.Threading.Tasks;
+using FlashCardMobileApp.Views;
+using System.Diagnostics;
 
 namespace FlashCardMobileApp
 {
@@ -20,32 +22,8 @@ namespace FlashCardMobileApp
         {
             try
             {
-                bool isLoggedIn = await App.ApiService.IsLoggedIn();
+                await Shell.Current.GoToAsync("//LoginPage");
 
-                if (!isLoggedIn)
-                {
-                    Console.WriteLine("No valid token, navigating to LoginPage");
-                    await Shell.Current.GoToAsync("//LoginPage");
-                    return;
-                }
-
-                Console.WriteLine("Valid token found. Checking user role...");
-
-                // Check if the user is Admin
-                bool isAdmin = await App.ApiService.IsAdmin();
-
-                if (isAdmin)
-                {
-                    Console.WriteLine("Admin detected, navigating to AdminHomePage");
-                    (Shell.Current as AppShell)?.SetFlyoutForAdmin(true);
-                    await Shell.Current.GoToAsync("//AdminHomePage");
-                }
-                else
-                {
-                    Console.WriteLine("User detected, navigating to WelcomePage");
-                    (Shell.Current as AppShell)?.SetFlyoutForAdmin(false);
-                    await Shell.Current.GoToAsync("//WelcomePage");
-                }
             }
             catch (Exception ex)
             {

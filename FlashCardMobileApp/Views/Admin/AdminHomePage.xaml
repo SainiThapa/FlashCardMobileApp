@@ -1,51 +1,58 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Shell xmlns="http://xamarin.com/schemas/2014/forms"
-       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-       xmlns:adminViews="clr-namespace:FlashCardMobileApp.Views.Admin"
-       xmlns:vm="clr-namespace:FlashCardMobileApp.ViewModels.Admin"
-       x:Class="FlashCardMobileApp.Views.Admin.AdminHomePage">
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FlashCardMobileApp.Views.Admin.AdminHomePage"
+             Title="Admin Panel">
 
-    <Shell.BindingContext>
-        <vm:AdminHomeViewModel />
-    </Shell.BindingContext>
+    <StackLayout Padding="30" Spacing="20" VerticalOptions="Center" HorizontalOptions="Center">
 
-    <!-- Flyout Header -->
-    <Shell.FlyoutHeader>
-        <Grid BackgroundColor="#1976D2" Padding="20">
-            <StackLayout Orientation="Vertical" HorizontalOptions="Center" VerticalOptions="Center">
-                <Image Source="admin_icon.png" HeightRequest="80" WidthRequest="80" HorizontalOptions="Center"/>
-                <Label Text="Admin Panel" FontSize="24" FontAttributes="Bold" TextColor="White" HorizontalOptions="Center"/>
-            </StackLayout>
-        </Grid>
-    </Shell.FlyoutHeader>
+        <!-- Button to View Users -->
+        <Button Text="View Users" 
+                Clicked="OnViewUsersClicked"
+                BackgroundColor="#1976D2"
+                TextColor="White"
+                CornerRadius="10" 
+                WidthRequest="250"/>
 
-    <!-- Content Section -->
-    <ShellContent>
-        <ContentPage>
-            <StackLayout Padding="20" Spacing="20" VerticalOptions="CenterAndExpand" HorizontalOptions="Center">
-                <Label Text="Welcome, Admin!" FontSize="26" FontAttributes="Bold" TextColor="#1976D2"/>
-                <Label Text="Total Users:" FontSize="24" FontAttributes="Bold" TextColor="#1976D2" />
-                <Label Text="{Binding TotalUsers}" FontSize="24" FontAttributes="Bold" TextColor="#1976D2" />
-                <Label Text="Total Categories:" FontSize="24" FontAttributes="Bold" TextColor="#1976D2"/>
-                <Label Text="{Binding TotalCategories}" FontSize="24" FontAttributes="Bold" TextColor="#1976D2" />
-                <Button Text="View Users" Clicked="Button_Clicked" BackgroundColor="#1976D2" TextColor="White" CornerRadius="10" WidthRequest="200" HeightRequest="50"/>
-            </StackLayout>
-        </ContentPage>
-    </ShellContent>
+        <!-- Button to View Categories -->
+        <Button Text="View Categories" 
+                Clicked="OnViewCategoriesClicked"
+                BackgroundColor="#4CAF50"
+                TextColor="White"
+                CornerRadius="10"
+                WidthRequest="250"/>
 
-    <!-- Flyout Menu Items -->
-    <FlyoutItem Title="Categories" Icon="categories_icon.png">
-        <ShellContent Route="AdminCategoriesPage" ContentTemplate="{DataTemplate adminViews:AdminCategoriesPage}" />
-    </FlyoutItem>
+        <!-- Button to Reset User Passwords -->
+        <Button Text="Reset User Passwords" 
+                Clicked="OnResetPasswordsClicked"
+                BackgroundColor="#FF9800"
+                TextColor="White"
+                CornerRadius="10" 
+                WidthRequest="250"/>
 
-    <FlyoutItem Title="Users" Icon="users_icon.png">
-        <ShellContent Route="AdminUsersPage" ContentTemplate="{DataTemplate adminViews:AdminUsersPage}" />
-    </FlyoutItem>
+        <!-- Button to Download User Flashcards Summary -->
+        <Button Text="Download User Flashcards Summary" 
+                Clicked="OnDownloadUserFlashcardsSummaryClicked"
+                BackgroundColor="#9C27B0"
+                TextColor="White"
+                CornerRadius="10" 
+                WidthRequest="250"/>
 
-    <FlyoutItem Title="Reset User Passwords" Icon="reset_password_icon.png">
-        <ShellContent Route="AdminResetPasswordsPage" ContentTemplate="{DataTemplate adminViews:AdminResetPasswordsPage}" />
-    </FlyoutItem>
+        <!-- Button to Download All Flashcards with Owners -->
+        <Button Text="Download All Flashcards with Owners" 
+                Clicked="OnDownloadAllFlashcardsWithOwnersClicked"
+                BackgroundColor="#2196F3"
+                TextColor="White"
+                CornerRadius="10"
+                WidthRequest="250"/>
 
-    <MenuItem Text="Logout" Command="{Binding LogoutCommand}" />
+        <!-- Button to Logout -->
+        <Button Text="Logout" 
+                Clicked="OnLogoutClicked"
+                BackgroundColor="#F44336"
+                TextColor="White"
+                CornerRadius="10"
+                WidthRequest="250"/>
 
-</Shell>
+    </StackLayout>
+</ContentPage>

@@ -54,5 +54,4 @@
     <ShellContent Route="AdminViewUserPage" ContentTemplate="{DataTemplate adminViews:AdminViewUserPage}" />
 
 
-
 </Shell>

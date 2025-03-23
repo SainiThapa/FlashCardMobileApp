@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -12,6 +13,7 @@ using FlashCardMobileApp.ViewModels.Admin;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Xamarin.Essentials;
+using Xamarin.Forms;
 
 namespace FlashCardMobileApp.Services
 {
@@ -623,9 +625,96 @@ namespace FlashCardMobileApp.Services
             }
         }
 
+        // Delete users in bulk
+        public async Task<bool> DeleteUsersAsync(List<string> userIds)
+        {
+            try
+            {
+                Debug.WriteLine("Delete users async in bulk");
+                Debug.WriteLine($"User IDs to delete: {string.Join(", ", userIds)}");
 
+                var requestUrl = "adminapi/bulk-delete-users";
+                var payload = new { userIds = userIds }; 
+                //var content = new StringContent(JsonConvert.SerializeObject(payload), Encoding.UTF8, "application/json");
 
-        public async Task<bool> IsLoggedIn()
+                //Debug.WriteLine($"Request body: {JsonConvert.SerializeObject(payload)}");
+
+                var request = await CreateAuthenticatedRequest(HttpMethod.Post, requestUrl, payload);
+
+                var response = await _httpClient.SendAsync(request);
+                string responseBody = await response.Content.ReadAsStringAsync();
+
+                Debug.WriteLine($"Bulk Delete Response: {response.StatusCode}");
+                Debug.WriteLine($"Response Body: {responseBody}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    Debug.WriteLine("Delete request successful");
+                    return true;
+                }
+                else
+                {
+                    Debug.WriteLine($"Delete request failed with status code: {response.StatusCode}");
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Exception in DeleteUsersAsync: {ex.Message}");
+                return false;
+            }
+        }
+        // User Flashcards Summary 
+        public async Task<bool> DownloadUserFlashCardsSummaryAsync()
+        {
+            return await DownloadFileAsync("adminapi/download-user-flashcards", "UserFlashCardsSummary.csv");
+        }
+
+        // All Flashcards with Owners 
+        public async Task<bool> DownloadAllFlashCardsWithOwnersAsync()
+        {
+            return await DownloadFileAsync("adminapi/download-all-flashcards", "AllFlashCardsWithOwners.csv");
+        }
+
+        // Common method to download files
+        private async Task<bool> DownloadFileAsync(string endpoint, string fileName)
+        {
+            try
+            {
+                var request = await CreateAuthenticatedRequest(HttpMethod.Get, endpoint);
+                var response = await _httpClient.SendAsync(request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsByteArrayAsync();
+                    string filePath = Path.Combine(FileSystem.CacheDirectory, fileName);
+
+                    File.WriteAllBytes(filePath, content);
+
+                    await Launcher.OpenAsync(new OpenFileRequest
+                    {
+                        File = new ReadOnlyFile(filePath)
+                    });
+
+                    return true;
+                }
+                else
+                {
+                    Debug.WriteLine($"Download failed. Status: {response.StatusCode}, Reason: {response.ReasonPhrase}");
+                    await Application.Current.MainPage.DisplayAlert("Error", "Failed to download the file.", "OK");
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Exception: {ex.Message}");
+                await Application.Current.MainPage.DisplayAlert("Error", $"An error occurred: {ex.Message}", "OK");
+                return false;
+            }
+        }
+
+        // Create Authenticated HTTP Request
+          public async Task<bool> IsLoggedIn()
         {
             var token = await SecureStorage.GetAsync("auth_token") ?? await SecureStorage.GetAsync("admin_auth_token");
             return !string.IsNullOrEmpty(token);
@@ -633,4 +722,5 @@ namespace FlashCardMobileApp.Services
 
 
     }
+
 }

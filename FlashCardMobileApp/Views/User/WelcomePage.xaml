@@ -6,6 +6,7 @@
 
     <StackLayout Padding="30" Spacing="20" VerticalOptions="Center" HorizontalOptions="Center">
 
+        <!-- Button to View My Flashcards -->
         <Button Text="View My Flashcards" 
                 Clicked="OnViewFlashcardsClicked"
                 BackgroundColor="#4CAF50"
@@ -13,6 +14,7 @@
                 CornerRadius="10" 
                 WidthRequest="250"/>
 
+        <!-- Button to Create New Flashcards -->
         <Button Text="Create New Flashcards" 
                 Clicked="OnCreateFlashcardsClicked"
                 BackgroundColor="#2196F3"
@@ -20,9 +22,34 @@
                 CornerRadius="10"
                 WidthRequest="250"/>
 
+        <!-- Button to Take Random Quiz -->
         <Button Text="Random Quiz" 
                 Clicked="OnRandomQuizClicked"
                 BackgroundColor="#FF9800"
+                TextColor="White"
+                CornerRadius="10"
+                WidthRequest="250"/>
+
+        <!-- Button to View Profile -->
+        <Button Text="View Profile" 
+                Clicked="OnViewProfileClicked"
+                BackgroundColor="#9C27B0"
+                TextColor="White"
+                CornerRadius="10" 
+                WidthRequest="250"/>
+
+        <!-- Button to Reset Password -->
+        <Button Text="Reset Password" 
+                Clicked="OnResetPasswordClicked"
+                BackgroundColor="#F44336"
+                TextColor="White"
+                CornerRadius="10"
+                WidthRequest="250"/>
+
+        <!-- Button to Logout -->
+        <Button Text="Logout" 
+                Clicked="OnLogoutClicked"
+                BackgroundColor="#607D8B"
                 TextColor="White"
                 CornerRadius="10"
                 WidthRequest="250"/>

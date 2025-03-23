@@ -10,39 +10,63 @@
 
     <StackLayout Padding="20" Spacing="20">
         <!-- Header Section -->
-        <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Spacing="10">
-            <Image Source="user_list_icon.png" HeightRequest="40" WidthRequest="40" />
-            <Label Text="List of Users" FontSize="26" FontAttributes="Bold" TextColor="#1976D2" VerticalOptions="Center" />
+        <StackLayout Orientation="Horizontal" HorizontalOptions="Start" Spacing="10">
+            <Label Text="Manage Users" FontSize="26" FontAttributes="Bold" TextColor="#1976D2" HorizontalOptions="Start" />
         </StackLayout>
 
         <!-- Create User Button -->
         <Button Text="Create User" FontSize="16" BackgroundColor="#1976D2" TextColor="White" 
                 HorizontalOptions="FillAndExpand" Padding="10,15" Clicked="CreateUserButton_Clicked"/>
 
-        <!-- Delete User Button -->
-        <Button Text="Delete Selected User" FontSize="16" BackgroundColor="Red" TextColor="White" 
-                HorizontalOptions="FillAndExpand" Padding="10,15" Clicked="DeleteUserButton_Clicked"/>
+        <!-- Create User Form (Initially Hidden) -->
+        <Frame x:Name="CreateUserFrame" BackgroundColor="#E3F2FD" Padding="20" IsVisible="False" CornerRadius="10">
+            <StackLayout Spacing="15">
+                <Label Text="Create New User" FontSize="24" FontAttributes="Bold" TextColor="#1976D2" />
+                <Entry x:Name="FirstNameEntry" PlaceholderColor="Gray" Placeholder="First Name" TextColor="Black"/>
+                <Entry x:Name="LastNameEntry" PlaceholderColor="Gray" Placeholder="Last Name" TextColor="Black"/>
+                <Entry x:Name="EmailEntry" PlaceholderColor="Gray" Placeholder="Email" Keyboard="Email" TextColor="Black"/>
+                <Entry x:Name="PasswordEntry" PlaceholderColor="Gray" Placeholder="Password" IsPassword="True" TextColor="Black"/>
+
+                <!-- Action Buttons -->
+                <StackLayout Orientation="Horizontal" Spacing="20" HorizontalOptions="Center">
+                    <Button Text="Create" BackgroundColor="#4CAF50" TextColor="White" Clicked="OnCreateUserConfirmed" />
+                    <Button Text="Cancel" BackgroundColor="#F44336" TextColor="White" Clicked="OnCancelCreateUser" />
+                </StackLayout>
+            </StackLayout>
+        </Frame>
+
+        <!-- Select All Checkbox -->
+        <StackLayout Orientation="Horizontal" HorizontalOptions="Start">
+            <CheckBox IsChecked="{Binding SelectAll}" CheckedChanged="OnSelectAllCheckedChanged"/>
+            <Label Text="Select All" TextColor="Black" FontSize="18"  VerticalOptions="Center" Padding="5"/>
+        </StackLayout>
+
+        <!-- Bulk Delete Button -->
+        <Button Text="Delete Selected Users" FontSize="16" BackgroundColor="Red" TextColor="White" 
+                HorizontalOptions="FillAndExpand" Padding="10,15" Clicked="OnBulkDeleteClicked"/>
 
         <!-- Users List Section -->
-        <Label Text="LIst of Users" FontSize="24" FontAttributes="Bold" HorizontalOptions="Start" TextColor="#333" />
+        <Label Text="List of Users" FontSize="24" FontAttributes="Bold" HorizontalOptions="Start" TextColor="#333" />
 
+        <!-- ListView with checkboxes for each user -->
         <ListView ItemsSource="{Binding Users}" ItemTapped="ListView_ItemTapped" HasUnevenRows="True">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <StackLayout Padding="5" Spacing="10" BackgroundColor="#D9D9F9">
+                        <StackLayout Padding="5" Spacing="10" BackgroundColor="#D9D9F9" Margin="0,0,0,20">
                             <StackLayout Orientation="Horizontal" Spacing="5">
-                                <!-- User Info -->
+                                <!-- User Info and Checkbox -->
+                                <CheckBox IsChecked="{Binding IsSelected}" VerticalOptions="Start" />
                                 <Label Text="{Binding FirstName}" FontSize="18" VerticalOptions="Start" TextColor="#1976D2" />
                                 <Label Text="{Binding LastName}" FontSize="18" VerticalOptions="Start" TextColor="#1976D2" />
-
                             </StackLayout>
 
-                            <StackLayout Orientation="Horizontal" Spacing="80">
-                            <Label Text="{Binding Email}" Padding="5" FontSize="16" VerticalOptions="Start" TextColor="Gray" />
-                                <Button Text="Delete" FontSize="16" BackgroundColor="Red" VerticalOptions="Start" TextColor="#E9E9E9" />
+                            <StackLayout Orientation="Horizontal" HorizontalOptions="Start">
+                                <Label Text="{Binding Email}" Padding="5" FontSize="16" VerticalOptions="Start" TextColor="Gray" />
                             </StackLayout>
-
+                            <StackLayout Orientation="Horizontal" HorizontalOptions="End">
+                                <Button Text="Delete" FontSize="16" BackgroundColor="Red" Clicked="DeleteUserButton_Clicked" VerticalOptions="Start" TextColor="#E9E9E9" />
+                            </StackLayout>
                         </StackLayout>
                     </ViewCell>
                 </DataTemplate>
