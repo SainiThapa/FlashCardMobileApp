@@ -30,6 +30,7 @@ namespace FlashCardMobileApp
             Routing.RegisterRoute("AdminHomePage", typeof(AdminHomePage));
             Routing.RegisterRoute("AdminCategoriesPage", typeof(AdminCategoriesPage));
             Routing.RegisterRoute("AdminUsersPage", typeof(AdminUsersPage));
+            Routing.RegisterRoute("AdminViewUserPage", typeof(AdminViewUserPage));
             Routing.RegisterRoute("AdminResetPasswordsPage", typeof(AdminResetPasswordsPage));
 
             BindingContext = this;

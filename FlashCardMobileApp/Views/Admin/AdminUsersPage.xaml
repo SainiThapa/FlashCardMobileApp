@@ -1,18 +1,48 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="FlashCardMobileApp.Views.Admin.AdminUsersPage"
-             BackgroundColor="#E3F2FD"
-             Title="Manage Users">
+             xmlns:vm="clr-namespace:FlashCardMobileApp.ViewModels.Admin"
+             x:Class="FlashCardMobileApp.Views.Admin.AdminUsersPage">
 
-    <StackLayout Padding="30" Spacing="20">
-        <ListView ItemsSource="{Binding Users}" HasUnevenRows="True">
+    <ContentPage.BindingContext>
+        <vm:AdminUsersViewModel/>
+    </ContentPage.BindingContext>
+
+    <StackLayout Padding="20" Spacing="20">
+        <!-- Header Section -->
+        <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Spacing="10">
+            <Image Source="user_list_icon.png" HeightRequest="40" WidthRequest="40" />
+            <Label Text="List of Users" FontSize="26" FontAttributes="Bold" TextColor="#1976D2" VerticalOptions="Center" />
+        </StackLayout>
+
+        <!-- Create User Button -->
+        <Button Text="Create User" FontSize="16" BackgroundColor="#1976D2" TextColor="White" 
+                HorizontalOptions="FillAndExpand" Padding="10,15" Clicked="CreateUserButton_Clicked"/>
+
+        <!-- Delete User Button -->
+        <Button Text="Delete Selected User" FontSize="16" BackgroundColor="Red" TextColor="White" 
+                HorizontalOptions="FillAndExpand" Padding="10,15" Clicked="DeleteUserButton_Clicked"/>
+
+        <!-- Users List Section -->
+        <Label Text="LIst of Users" FontSize="24" FontAttributes="Bold" HorizontalOptions="Start" TextColor="#333" />
+
+        <ListView ItemsSource="{Binding Users}" ItemTapped="ListView_ItemTapped" HasUnevenRows="True">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <StackLayout Orientation="Horizontal" Padding="10">
-                            <Label Text="{Binding Email}" FontSize="18"/>
-                            <Button Text="Delete" Command="{Binding DeleteUserCommand}" CommandParameter="{Binding .}" BackgroundColor="#D32F2F" TextColor="White"/>
+                        <StackLayout Padding="5" Spacing="10" BackgroundColor="#D9D9F9">
+                            <StackLayout Orientation="Horizontal" Spacing="5">
+                                <!-- User Info -->
+                                <Label Text="{Binding FirstName}" FontSize="18" VerticalOptions="Start" TextColor="#1976D2" />
+                                <Label Text="{Binding LastName}" FontSize="18" VerticalOptions="Start" TextColor="#1976D2" />
+
+                            </StackLayout>
+
+                            <StackLayout Orientation="Horizontal" Spacing="80">
+                            <Label Text="{Binding Email}" Padding="5" FontSize="16" VerticalOptions="Start" TextColor="Gray" />
+                                <Button Text="Delete" FontSize="16" BackgroundColor="Red" VerticalOptions="Start" TextColor="#E9E9E9" />
+                            </StackLayout>
+
                         </StackLayout>
                     </ViewCell>
                 </DataTemplate>

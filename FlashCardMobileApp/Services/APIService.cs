@@ -7,6 +7,8 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using FlashCardMobileApp.Models;
+using FlashCardMobileApp.ViewModels;
+using FlashCardMobileApp.ViewModels.Admin;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Xamarin.Essentials;
@@ -36,7 +38,18 @@ namespace FlashCardMobileApp.Services
 
         private async Task<HttpRequestMessage> CreateAuthenticatedRequest(HttpMethod method, string url, object body = null)
         {
-            var token = await GetTokenAsync();
+            string token;
+
+            if (url.StartsWith("Adminapi", StringComparison.OrdinalIgnoreCase) || url.Contains("admin"))
+            {
+                token = await SecureStorage.GetAsync("admin_auth_token");
+            }
+            else
+            {
+                token = await SecureStorage.GetAsync("auth_token");
+            }
+
+            Debug.WriteLine("TOKEN GENERATED : " + token);
             if (string.IsNullOrEmpty(token))
                 throw new UnauthorizedAccessException("User is not authenticated.");
 
@@ -54,15 +67,29 @@ namespace FlashCardMobileApp.Services
         {
             try
             {
-                var request = await CreateAuthenticatedRequest(HttpMethod.Put, $"AccountApi/user/{email}/updatePassword", new { Password = newPassword });
+                var requestUrl = $"adminapi/user/{email}/updatePassword";
+                var passwordModel = new { Password = newPassword };
+                var json = JsonConvert.SerializeObject(passwordModel);
+
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var request = await CreateAuthenticatedRequest(HttpMethod.Put, requestUrl);
+
+                request.Content = content;
                 var response = await _httpClient.SendAsync(request);
-                return response.IsSuccessStatusCode;
+                if (response.IsSuccessStatusCode)
+                {
+                    // Log the success message
+                    Console.WriteLine("Password updated successfully.");
+                    return true;
+                }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"UpdatePassword Exception: {ex.Message}");
                 return false;
             }
+            return false;
         }
 
         public async Task<bool> AdminLoginAsync(string email, string password)
@@ -126,9 +153,43 @@ namespace FlashCardMobileApp.Services
                 return false;
             }
         }
+        public async Task<UserDetailViewModel> GetUserDetailAsync(string userId)
+        {
+            try
+            {
+                Debug.WriteLine($"The userid is being carried: {userId} is the userid");
+
+                var request = await CreateAuthenticatedRequest(HttpMethod.Get, $"adminapi/Users/{Uri.EscapeDataString(userId)}/details");
 
 
-        public async Task<Flashcard[]> GetFlashcardsAsync()
+                var response = await _httpClient.SendAsync(request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    Debug.WriteLine("Successfully fetched user details: ");
+
+                    var json = await response.Content.ReadAsStringAsync();
+                    Debug.WriteLine("Response: " + json);
+
+                    return JsonConvert.DeserializeObject<UserDetailViewModel>(json);
+                }
+                else
+                {
+                    Debug.WriteLine($"Failed to fetch the details. Status code: {response.StatusCode}");
+                    var errorResponse = await response.Content.ReadAsStringAsync();
+                    Debug.WriteLine("Error Response: " + errorResponse);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error fetching user details: {ex.Message}");
+            }
+            return null;
+        }
+
+
+        public async Task<Models.Flashcard[]> GetFlashcardsAsync()
         {
             try
             {
@@ -160,7 +221,7 @@ namespace FlashCardMobileApp.Services
 
                 if (parsedResponse != null && parsedResponse["$values"] != null)
                 {
-                    return parsedResponse["$values"].ToObject<Flashcard[]>(); // Extract array properly
+                    return parsedResponse["$values"].ToObject<Models.Flashcard[]>(); // Extract array properly
                 }
 
                 Debug.WriteLine("Error: No flashcards found in response.");
@@ -178,7 +239,7 @@ namespace FlashCardMobileApp.Services
         {
             try
             {
-                var request = await CreateAuthenticatedRequest(HttpMethod.Get, "FlashCardAPI/categories");
+                var request = await CreateAuthenticatedRequest(HttpMethod.Get, "adminapi/categories");
                 var response = await _httpClient.SendAsync(request);
                 response.EnsureSuccessStatusCode();
 
@@ -225,7 +286,7 @@ namespace FlashCardMobileApp.Services
         }
 
 
-        public async Task<bool> UpdateFlashcardAsync(Flashcard flashcard)
+        public async Task<bool> UpdateFlashcardAsync(Models.Flashcard flashcard)
         {
             try
             {
@@ -320,35 +381,40 @@ namespace FlashCardMobileApp.Services
             Console.WriteLine($"Token: {token}");
 
             if (string.IsNullOrEmpty(token))
-                Console.WriteLine("⚠️ No token found. User is not logged in.");
+                Debug.WriteLine("No token found. User is not logged in.");
 
             var isValid = await _authService.IsTokenValidAsync();
-            Console.WriteLine($"Is Token Valid: {isValid}");
+            Debug.WriteLine($"Is Token Valid: {isValid}");
         }
 
-        public async Task<List<User>> GetUsersAsync()
+        public async Task<List<UserViewModel>> GetUsersAsync()
         {
+            Debug.WriteLine("Called the getusersasync method");
+
             try
             {
-                var requestUrl = "adminapi/users";
+                var requestUrl = "Adminapi/users";
+                Debug.WriteLine("Calling the user page");
                 var request = await CreateAuthenticatedRequest(HttpMethod.Get, requestUrl);
                 var response = await _httpClient.SendAsync(request);
+                Debug.WriteLine($" Called the GetUserAsync: {response.StatusCode}");
 
                 if (response.IsSuccessStatusCode)
                 {
+                    Debug.WriteLine($" Success to fetch users: {response.StatusCode}");
                     var json = await response.Content.ReadAsStringAsync();
-                    return JsonConvert.DeserializeObject<List<User>>(json);
+                    return JsonConvert.DeserializeObject<List<UserViewModel>>(json);
                 }
                 else
                 {
-                    Console.WriteLine($"❌ Failed to fetch users: {response.StatusCode}");
-                    return new List<User>();
+                    Debug.WriteLine($" Failed to fetch users: {response.StatusCode}");
+                    return new List<UserViewModel>();
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"🚨 Exception in GetUsersAsync: {ex.Message}");
-                return new List<User>();
+                Debug.WriteLine($"Exception in GetUsersAsync: {ex.Message}");
+                return new List<UserViewModel>();
             }
         }
 
@@ -363,7 +429,7 @@ namespace FlashCardMobileApp.Services
 
                 if (response.IsSuccessStatusCode)
                 {
-                    Console.WriteLine($"✅ User {userId} deleted successfully.");
+                    Debug.WriteLine($"User {userId} deleted successfully.");
                     return true;
                 }
                 else
@@ -413,19 +479,54 @@ namespace FlashCardMobileApp.Services
 
         public async Task<bool> AddCategoryAsync(Category category)
         {
+            var requestUrl = "adminapi/categories";
+            var request = await CreateAuthenticatedRequest(HttpMethod.Post, requestUrl);
+
             var json = JsonConvert.SerializeObject(category);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
+            request.Content = content;
+            var response = await _httpClient.SendAsync(request);
+            return response.IsSuccessStatusCode;
+        }
+        public async Task<bool> UpdateCategoryAsync(Category category)
+        {
+            var requestUrl = $"adminapi/categories/{category.Id}";
+            var json = JsonConvert.SerializeObject(category);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync("api/adminapi/categories", content);
+            // Create the authenticated request
+            var request = await CreateAuthenticatedRequest(HttpMethod.Put, requestUrl);
+            request.Content = content;
+
+            var response = await _httpClient.SendAsync(request);
             return response.IsSuccessStatusCode;
         }
 
+
         // Delete Category
-        public async Task<bool> DeleteCategoryAsync(int categoryId)
+        public async Task<bool> DeleteCategoryAsync(Category category)
         {
-            var response = await _httpClient.DeleteAsync($"api/adminapi/categories/{categoryId}");
+            try
+            {
+
+            Debug.WriteLine("Deleted Category");
+
+            var requestUrl = $"adminapi/categories/{category.Id}";
+            var request = await CreateAuthenticatedRequest(HttpMethod.Delete, requestUrl);
+            Debug.WriteLine($"Request URL: {requestUrl}");
+
+
+                var response = await _httpClient.SendAsync(request);
+            Debug.WriteLine($"Response Status Code: {response.StatusCode}");
             return response.IsSuccessStatusCode;
+        
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine($"Error in DeleteCategoryAsync: {e.Message}");
+                return false;
+            }
         }
 
         public async Task<bool> IsAdmin()
@@ -447,6 +548,82 @@ namespace FlashCardMobileApp.Services
                 return false;
             }
         }
+
+        public async Task<List<Flashcard>> GetUserFlashcardsAsync(string userId)
+        {
+            try
+            {
+                var requestUrl = $"adminapi/users/{userId}/flashcards";
+                var request = await CreateAuthenticatedRequest(HttpMethod.Get, requestUrl);
+                var response = await _httpClient.SendAsync(request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject<List<Flashcard>>(json);
+                }
+                else
+                {
+                    Debug.WriteLine($"Failed to fetch flashcards: {response.StatusCode}");
+                    return new List<Flashcard>();
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Exception in GetUserFlashcardsAsync: {ex.Message}");
+                return new List<Flashcard>();
+            }
+        }
+
+        public async Task<bool> CreateFlashcardAsync(string userId, CreateFlashcardViewModel model)
+        {
+            try
+            {
+                var requestUrl = $"adminapi/users/{userId}/flashcards";
+                var request = await CreateAuthenticatedRequest(HttpMethod.Post, requestUrl, model);
+                var response = await _httpClient.SendAsync(request);
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Exception in CreateFlashcardAsync: {ex.Message}");
+                return false;
+            }
+        }
+
+        public async Task<bool> UpdateFlashcardAsync(string userId, int flashcardId, EditFlashcardViewModel model)
+        {
+            try
+            {
+                var requestUrl = $"adminapi/users/{userId}/flashcards/{flashcardId}";
+                var request = await CreateAuthenticatedRequest(HttpMethod.Put, requestUrl, model);
+                var response = await _httpClient.SendAsync(request);
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Exception in UpdateFlashcardAsync: {ex.Message}");
+                return false;
+            }
+        }
+
+        public async Task<bool> DeleteFlashcardAsync(string userId, int flashcardId)
+        {
+            try
+            {
+                var requestUrl = $"adminapi/users/{userId}/flashcards/{flashcardId}";
+                var request = await CreateAuthenticatedRequest(HttpMethod.Delete, requestUrl);
+                var response = await _httpClient.SendAsync(request);
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Exception in DeleteFlashcardAsync: {ex.Message}");
+                return false;
+            }
+        }
+
+
 
         public async Task<bool> IsLoggedIn()
         {

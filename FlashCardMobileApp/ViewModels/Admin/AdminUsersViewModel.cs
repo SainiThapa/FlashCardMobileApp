@@ -1,58 +1,79 @@
 ﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
-using FlashCardMobileApp.Models;
 using FlashCardMobileApp.Services;
+using FlashCardMobileApp.Models;
+using FlashCardMobileApp.Views.Admin;
+using Microsoft.AspNet.Identity;
 
 namespace FlashCardMobileApp.ViewModels.Admin
 {
     public class AdminUsersViewModel : BaseViewModel
     {
-        private readonly ApiService _apiService;
-        public ObservableCollection<User> Users { get; set; }
-        public ICommand LoadUsersCommand { get; }
-        public ICommand DeleteUserCommand { get; }
+        private ObservableCollection<UserViewModel> _users;
 
+        private readonly ApiService _apiService;
+        public ObservableCollection<UserViewModel> Users { get; set; }
+        public ICommand LoadUsersCommand { get; }
+        public ICommand ViewUserCommand { get; }
+
+        private UserViewModel _selectedUser;
+
+        public UserViewModel SelectedUser
+        {
+            get => _selectedUser;
+            set
+            {
+                if (_selectedUser != value)
+                {
+                    // Unselect all users when a new user is selected
+                    foreach (var user in _users)
+                    {
+                        user.IsSelected = false;
+                    }
+
+                    _selectedUser = value;
+
+                    // Mark the selected user
+                    if (_selectedUser != null)
+                    {
+                        _selectedUser.IsSelected = true;
+                    }
+
+                    OnPropertyChanged();
+                }
+            }
+        }
         public AdminUsersViewModel()
         {
-            Title = "Manage Users";
             _apiService = new ApiService();
-            Users = new ObservableCollection<User>();
-
+            Users = new ObservableCollection<UserViewModel>();
             LoadUsersCommand = new Command(async () => await LoadUsers());
-            DeleteUserCommand = new Command<User>(async (user) => await DeleteUser(user));
-
-            LoadUsersCommand.Execute(null);
+            //ViewUserCommand = new Command<UserViewModel>(async (user) => await ViewUserDetails(user));
         }
+        //private async void OnUserTapped(object sender, ItemTappedEventArgs e)
+        //{
+        //    if (e.Item is UserViewModel selectedUser)
+        //    {
+        //await Application.Current.MainPage.Navigation.PushAsync(new AdminViewUserPage(selectedUser.Id));
+        //    }
+        //    ((ListView)sender).SelectedItem = null;
+        //}
 
         private async Task LoadUsers()
         {
-            IsBusy = true;
-            try
-            {
-                var users = await _apiService.GetUsersAsync();
-                Users.Clear();
-                foreach (var user in users)
-                {
-                    Users.Add(user);
-                }
-            }
-            finally
-            {
-                IsBusy = false;
-            }
+            Users.Clear();
+            var usersList = await _apiService.GetUsersAsync();
+            foreach (var user in usersList)
+                Users.Add(user);
         }
 
-        private async Task DeleteUser(User user)
-        {
-            if (user == null) return;
-
-            bool confirm = await Application.Current.MainPage.DisplayAlert("Delete", $"Delete user {user.Email}?", "Yes", "No");
-            if (!confirm) return;
-
-            await _apiService.DeleteUserAsync(user.Id);
-            Users.Remove(user);
-        }
+        //private async Task ViewUserDetails(UserViewModel user)
+        //{
+        //    if (user == null) return;
+        //    await Shell.Current.GoToAsync($"AdminViewUserPage?userId={user.Id}");
+        //}
     }
 }

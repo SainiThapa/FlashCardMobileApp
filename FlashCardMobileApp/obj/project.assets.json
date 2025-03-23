@@ -3192,11 +3192,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\DELL\\XAM-Project\\FlashCardApp\\FlashCardMobileApp\\FlashCardMobileApp\\FlashCardMobileApp.csproj",
+      "projectUniqueName": "C:\\Users\\DELL\\Desktop\\FlashCardMobileApp\\FlashCardMobileApp\\FlashCardMobileApp.csproj",
       "projectName": "FlashCardMobileApp",
-      "projectPath": "C:\\Users\\DELL\\XAM-Project\\FlashCardApp\\FlashCardMobileApp\\FlashCardMobileApp\\FlashCardMobileApp.csproj",
+      "projectPath": "C:\\Users\\DELL\\Desktop\\FlashCardMobileApp\\FlashCardMobileApp\\FlashCardMobileApp.csproj",
       "packagesPath": "C:\\Users\\DELL\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\DELL\\XAM-Project\\FlashCardApp\\FlashCardMobileApp\\FlashCardMobileApp\\obj\\",
+      "outputPath": "C:\\Users\\DELL\\Desktop\\FlashCardMobileApp\\FlashCardMobileApp\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

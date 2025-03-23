@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\DELL\\XAM-Project\\FlashCardApp\\FlashCardMobileApp\\FlashCardMobileApp.Android\\FlashCardMobileApp.Android.csproj": {}
+    "C:\\Users\\DELL\\Desktop\\FlashCardMobileApp\\FlashCardMobileApp.Android\\FlashCardMobileApp.Android.csproj": {}
   },
   "projects": {
-    "C:\\Users\\DELL\\XAM-Project\\FlashCardApp\\FlashCardMobileApp\\FlashCardMobileApp.Android\\FlashCardMobileApp.Android.csproj": {
+    "C:\\Users\\DELL\\Desktop\\FlashCardMobileApp\\FlashCardMobileApp.Android\\FlashCardMobileApp.Android.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\DELL\\XAM-Project\\FlashCardApp\\FlashCardMobileApp\\FlashCardMobileApp.Android\\FlashCardMobileApp.Android.csproj",
+        "projectUniqueName": "C:\\Users\\DELL\\Desktop\\FlashCardMobileApp\\FlashCardMobileApp.Android\\FlashCardMobileApp.Android.csproj",
         "projectName": "FlashCardMobileApp.Android",
-        "projectPath": "C:\\Users\\DELL\\XAM-Project\\FlashCardApp\\FlashCardMobileApp\\FlashCardMobileApp.Android\\FlashCardMobileApp.Android.csproj",
+        "projectPath": "C:\\Users\\DELL\\Desktop\\FlashCardMobileApp\\FlashCardMobileApp.Android\\FlashCardMobileApp.Android.csproj",
         "packagesPath": "C:\\Users\\DELL\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\DELL\\XAM-Project\\FlashCardApp\\FlashCardMobileApp\\FlashCardMobileApp.Android\\obj\\",
+        "outputPath": "C:\\Users\\DELL\\Desktop\\FlashCardMobileApp\\FlashCardMobileApp.Android\\obj\\",
         "projectStyle": "PackageReference",
         "skipContentFileWrite": true,
         "UsingMicrosoftNETSdk": false,
@@ -33,8 +33,8 @@
         "frameworks": {
           "monoandroid13.0": {
             "projectReferences": {
-              "C:\\Users\\DELL\\XAM-Project\\FlashCardApp\\FlashCardMobileApp\\FlashCardMobileApp\\FlashCardMobileApp.csproj": {
-                "projectPath": "C:\\Users\\DELL\\XAM-Project\\FlashCardApp\\FlashCardMobileApp\\FlashCardMobileApp\\FlashCardMobileApp.csproj"
+              "C:\\Users\\DELL\\Desktop\\FlashCardMobileApp\\FlashCardMobileApp\\FlashCardMobileApp.csproj": {
+                "projectPath": "C:\\Users\\DELL\\Desktop\\FlashCardMobileApp\\FlashCardMobileApp\\FlashCardMobileApp.csproj"
               }
             }
           }
@@ -64,14 +64,14 @@
         }
       }
     },
-    "C:\\Users\\DELL\\XAM-Project\\FlashCardApp\\FlashCardMobileApp\\FlashCardMobileApp\\FlashCardMobileApp.csproj": {
+    "C:\\Users\\DELL\\Desktop\\FlashCardMobileApp\\FlashCardMobileApp\\FlashCardMobileApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\DELL\\XAM-Project\\FlashCardApp\\FlashCardMobileApp\\FlashCardMobileApp\\FlashCardMobileApp.csproj",
+        "projectUniqueName": "C:\\Users\\DELL\\Desktop\\FlashCardMobileApp\\FlashCardMobileApp\\FlashCardMobileApp.csproj",
         "projectName": "FlashCardMobileApp",
-        "projectPath": "C:\\Users\\DELL\\XAM-Project\\FlashCardApp\\FlashCardMobileApp\\FlashCardMobileApp\\FlashCardMobileApp.csproj",
+        "projectPath": "C:\\Users\\DELL\\Desktop\\FlashCardMobileApp\\FlashCardMobileApp\\FlashCardMobileApp.csproj",
         "packagesPath": "C:\\Users\\DELL\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\DELL\\XAM-Project\\FlashCardApp\\FlashCardMobileApp\\FlashCardMobileApp\\obj\\",
+        "outputPath": "C:\\Users\\DELL\\Desktop\\FlashCardMobileApp\\FlashCardMobileApp\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

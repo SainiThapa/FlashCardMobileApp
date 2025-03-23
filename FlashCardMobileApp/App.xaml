@@ -2,10 +2,13 @@
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:FlashCardMobileApp"
+             xmlns:converters="clr-namespace:FlashCardMobileApp.Converters"
+             
              x:Class="FlashCardMobileApp.App">
     <Application.Resources>
         <ResourceDictionary>
             <local:EditModeColorConverter x:Key="EditModeColorConverter"/>
+            <converters:BoolToColorConverter x:Key="BoolToColorConverter" />
             <Color x:Key="Primary">#2196F3</Color>
             <Style x:Key="TitleStyle" TargetType="Button">
                 <Setter Property="TextColor" Value="White"></Setter>

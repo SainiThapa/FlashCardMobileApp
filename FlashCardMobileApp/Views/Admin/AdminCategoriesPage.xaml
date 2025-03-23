@@ -6,16 +6,28 @@
              Title="Manage Categories">
 
     <StackLayout Padding="30" Spacing="20">
-        <Button Text="Add Category" Command="{Binding AddCategoryCommand}" BackgroundColor="#4CAF50" TextColor="White"/>
-        <ListView ItemsSource="{Binding Categories}" HasUnevenRows="True">
+
+        <!-- Add Category Button -->
+        <Button Text="Add Category" Command="{Binding AddCategoryCommand}" BackgroundColor="#4CAF50" TextColor="White" HeightRequest="50" FontSize="18" BorderColor="#388E3C" BorderWidth="2" CornerRadius="5"/>
+
+        <!-- Categories List -->
+        <ListView ItemsSource="{Binding Categories}" HasUnevenRows="True" SeparatorVisibility="None">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <StackLayout Orientation="Horizontal" Padding="10">
-                            <Label Text="{Binding Name}" FontSize="18"/>
-                            <Button Text="Edit" Command="{Binding EditCategoryCommand}" CommandParameter="{Binding .}" BackgroundColor="#FF9800" TextColor="White"/>
-                            <Button Text="Delete" Command="{Binding DeleteCategoryCommand}" CommandParameter="{Binding .}" BackgroundColor="#D32F2F" TextColor="White"/>
-                        </StackLayout>
+                        <!-- Category Container with Card-like Appearance -->
+                        <Frame HasShadow="True" BorderColor="#BBDEFB" Padding="15" Margin="5" CornerRadius="10" BackgroundColor="#ffffff">
+                            <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" Spacing="10">
+                                <!-- Category Name -->
+                                <Label Text="{Binding Name}" FontSize="18" VerticalOptions="Center" HorizontalOptions="StartAndExpand" TextColor="#1976D2"/>
+
+                                <!-- Edit and Delete Buttons with Styling -->
+                                <StackLayout Orientation="Horizontal" HorizontalOptions="End" Spacing="10">
+                                    <Button Text="Edit" Clicked="OnEditCategoryClicked" CommandParameter="{Binding .}" BackgroundColor="#FF9800" TextColor="White" Padding="10,5" CornerRadius="5" WidthRequest="80"/>
+                                    <Button Text="Delete" Clicked="OnDeleteCategoryClicked" CommandParameter="{Binding .}" BackgroundColor="#D32F2F" TextColor="White" Padding="10,5" CornerRadius="5" WidthRequest="80"/>
+                                </StackLayout>
+                            </StackLayout>
+                        </Frame>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>

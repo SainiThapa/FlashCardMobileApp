@@ -4,6 +4,7 @@ using System.Windows.Input;
 using Xamarin.Forms;
 using FlashCardMobileApp.Models;
 using FlashCardMobileApp.Services;
+using System.Diagnostics;
 
 namespace FlashCardMobileApp.ViewModels.Admin
 {
@@ -13,9 +14,6 @@ namespace FlashCardMobileApp.ViewModels.Admin
         public ObservableCollection<Category> Categories { get; set; }
         public ICommand LoadCategoriesCommand { get; }
         public ICommand AddCategoryCommand { get; }
-        public ICommand DeleteCategoryCommand { get; }
-        public int Id { get; set; }
-        public string Name { get; set; } = string.Empty;
 
         public AdminCategoriesViewModel()
         {
@@ -25,12 +23,11 @@ namespace FlashCardMobileApp.ViewModels.Admin
 
             LoadCategoriesCommand = new Command(async () => await LoadCategories());
             AddCategoryCommand = new Command(async () => await AddCategory());
-            DeleteCategoryCommand = new Command<Category>(async (category) => await DeleteCategory(category));
 
             LoadCategoriesCommand.Execute(null);
         }
 
-        private async Task LoadCategories()
+        public async Task LoadCategories()
         {
             IsBusy = true;
             try
@@ -56,17 +53,10 @@ namespace FlashCardMobileApp.ViewModels.Admin
                 await _apiService.AddCategoryAsync(new Category { Name = categoryName });
                 await LoadCategories();
             }
-        }
-
-        private async Task DeleteCategory(Category category)
-        {
-            if (category == null) return;
-
-            bool confirm = await Application.Current.MainPage.DisplayAlert("Delete", $"Delete category {category.Name}?", "Yes", "No");
-            if (!confirm) return;
-
-            await _apiService.DeleteCategoryAsync(category.Id);
-            Categories.Remove(category);
+            else
+            {
+                await Application.Current.MainPage.DisplayAlert("Category error", "Category name cannot be empty", "OK");
+            }
         }
     }
 }

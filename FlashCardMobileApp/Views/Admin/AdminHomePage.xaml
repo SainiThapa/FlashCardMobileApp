@@ -3,8 +3,7 @@
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:adminViews="clr-namespace:FlashCardMobileApp.Views.Admin"
        xmlns:vm="clr-namespace:FlashCardMobileApp.ViewModels.Admin"
-       x:Class="FlashCardMobileApp.Views.Admin.AdminHomePage"
-       FlyoutBehavior="Flyout">
+       x:Class="FlashCardMobileApp.Views.Admin.AdminHomePage">
 
     <Shell.BindingContext>
         <vm:AdminHomeViewModel />
@@ -25,7 +24,11 @@
         <ContentPage>
             <StackLayout Padding="20" Spacing="20" VerticalOptions="CenterAndExpand" HorizontalOptions="Center">
                 <Label Text="Welcome, Admin!" FontSize="26" FontAttributes="Bold" TextColor="#1976D2"/>
-                <Button Text="View Users" Command="{Binding ViewUsersCommand}" BackgroundColor="#1976D2" TextColor="White" CornerRadius="10" WidthRequest="200" HeightRequest="50"/>
+                <Label Text="Total Users:" FontSize="24" FontAttributes="Bold" TextColor="#1976D2" />
+                <Label Text="{Binding TotalUsers}" FontSize="24" FontAttributes="Bold" TextColor="#1976D2" />
+                <Label Text="Total Categories:" FontSize="24" FontAttributes="Bold" TextColor="#1976D2"/>
+                <Label Text="{Binding TotalCategories}" FontSize="24" FontAttributes="Bold" TextColor="#1976D2" />
+                <Button Text="View Users" Clicked="Button_Clicked" BackgroundColor="#1976D2" TextColor="White" CornerRadius="10" WidthRequest="200" HeightRequest="50"/>
             </StackLayout>
         </ContentPage>
     </ShellContent>

@@ -7563,11 +7563,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\DELL\\XAM-Project\\FlashCardApp\\FlashCardMobileApp\\FlashCardMobileApp.iOS\\FlashCardMobileApp.iOS.csproj",
+      "projectUniqueName": "C:\\Users\\DELL\\Desktop\\FlashCardMobileApp\\FlashCardMobileApp.iOS\\FlashCardMobileApp.iOS.csproj",
       "projectName": "FlashCardMobileApp.iOS",
-      "projectPath": "C:\\Users\\DELL\\XAM-Project\\FlashCardApp\\FlashCardMobileApp\\FlashCardMobileApp.iOS\\FlashCardMobileApp.iOS.csproj",
+      "projectPath": "C:\\Users\\DELL\\Desktop\\FlashCardMobileApp\\FlashCardMobileApp.iOS\\FlashCardMobileApp.iOS.csproj",
       "packagesPath": "C:\\Users\\DELL\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\DELL\\XAM-Project\\FlashCardApp\\FlashCardMobileApp\\FlashCardMobileApp.iOS\\obj\\",
+      "outputPath": "C:\\Users\\DELL\\Desktop\\FlashCardMobileApp\\FlashCardMobileApp.iOS\\obj\\",
       "projectStyle": "PackageReference",
       "skipContentFileWrite": true,
       "UsingMicrosoftNETSdk": false,
@@ -7589,8 +7589,8 @@
       "frameworks": {
         "xamarinios10": {
           "projectReferences": {
-            "C:\\Users\\DELL\\XAM-Project\\FlashCardApp\\FlashCardMobileApp\\FlashCardMobileApp\\FlashCardMobileApp.csproj": {
-              "projectPath": "C:\\Users\\DELL\\XAM-Project\\FlashCardApp\\FlashCardMobileApp\\FlashCardMobileApp\\FlashCardMobileApp.csproj"
+            "C:\\Users\\DELL\\Desktop\\FlashCardMobileApp\\FlashCardMobileApp\\FlashCardMobileApp.csproj": {
+              "projectPath": "C:\\Users\\DELL\\Desktop\\FlashCardMobileApp\\FlashCardMobileApp\\FlashCardMobileApp.csproj"
             }
           }
         }

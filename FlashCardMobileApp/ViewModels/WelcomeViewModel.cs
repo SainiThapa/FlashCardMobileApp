@@ -32,7 +32,6 @@ namespace FlashCardMobileApp.ViewModels
             _apiService = new ApiService();
             LoadDataCommand = new Command(async () => await LoadDataAsync());
 
-            // Load data when ViewModel is created
             LoadDataAsync();
         }
 
