@@ -3,63 +3,69 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FlashCardMobileApp.Views.User.ProfilePage"
              Title="My Profile"
-             BackgroundColor="#F3F4F6">
+             BackgroundColor="#F9FAFB">
 
-    <StackLayout Padding="20" Spacing="20">
+    <ScrollView>
+        <StackLayout Padding="20" Spacing="20">
 
-        <Frame BackgroundColor="#4CAF50" CornerRadius="20" Padding="30" HasShadow="True">
-            <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
-                <Image Source="user_icon.png" HeightRequest="100" WidthRequest="100" HorizontalOptions="Center"/>
-                <Label Text="Welcome, User" FontSize="24" FontAttributes="Bold" TextColor="White" HorizontalOptions="Center"/>
-            </StackLayout>
-        </Frame>
+            <!-- Welcome Section -->
+            <Frame BackgroundColor="#4CAF50" CornerRadius="25" Padding="40" HasShadow="True">
+                <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                    <Label Text="Welcome, User" FontSize="28" FontAttributes="Bold" TextColor="White" HorizontalOptions="Center"/>
+                </StackLayout>
+            </Frame>
 
-        <Frame BackgroundColor="White" CornerRadius="20" Padding="25" HasShadow="True">
+            <!-- Profile Details Section -->
+            <Frame BackgroundColor="White" CornerRadius="25" Padding="30" HasShadow="True">
+                <StackLayout Spacing="20">
+
+                    <!-- Username -->
+                    <Label Text="Username" FontAttributes="Bold" FontSize="18" TextColor="#333"/>
+                    <Frame BackgroundColor="#119299" CornerRadius="15" Padding="10">
+                        <Entry Text="{Binding Profile.Username}" 
+                               TextColor="Black" 
+                               FontSize="16"
+                               IsEnabled="{Binding IsEditing}" 
+                               BackgroundColor="Transparent" 
+                               Placeholder="No username" 
+                               PlaceholderColor="#757575"/>
+                    </Frame>
+
+                    <!-- Email -->
+                    <Label Text="Email" FontAttributes="Bold" FontSize="18" TextColor="#333"/>
+                    <Frame BackgroundColor="#119299" CornerRadius="15" Padding="10">
+                        <Entry Text="{Binding Profile.Email}" 
+                               TextColor="Black" 
+                               FontSize="16"
+                               IsEnabled="{Binding IsEditing}" 
+                               BackgroundColor="Transparent" 
+                               Placeholder="Enter your email" 
+                               PlaceholderColor="#757575"/>
+                    </Frame>
+
+                </StackLayout>
+            </Frame>
+
+            <!-- Action Buttons -->
             <StackLayout Spacing="15">
+                <Button Text="Edit Profile" Command="{Binding ToggleEditCommand}" 
+                        BackgroundColor="#FF9800" TextColor="White" FontSize="18" 
+                        IsVisible="{Binding IsNotEditing}" CornerRadius="15" HeightRequest="50"/>
 
-                <Label Text="Username" FontAttributes="Bold" FontSize="16" TextColor="#333"/>
-                <Frame BackgroundColor="#E0E0E0" CornerRadius="10" Padding="5">
-                    <Entry Text="{Binding Profile.Username}" 
-                           TextColor="Black" 
-                           FontSize="16"
-                           IsEnabled="{Binding IsEditing}" 
-                           BackgroundColor="#FFFFFF" 
-                           Placeholder="Enter your username" 
-                           PlaceholderColor="#757575"/>
-                </Frame>
+                <StackLayout Orientation="Horizontal" IsVisible="{Binding IsEditing}" Spacing="20">
+                    <Button Text="Save" Command="{Binding SaveCommand}" 
+                            BackgroundColor="#4CAF50" TextColor="White" FontSize="18" 
+                            WidthRequest="150" CornerRadius="15" HeightRequest="50"/>
+                    <Button Text="Cancel" Command="{Binding CancelCommand}" 
+                            BackgroundColor="#D32F2F" TextColor="White" FontSize="18" 
+                            WidthRequest="150" CornerRadius="15" HeightRequest="50"/>
+                </StackLayout>
 
-                <Label Text="Email" FontAttributes="Bold" FontSize="16" TextColor="#333"/>
-                <Frame BackgroundColor="#E0E0E0" CornerRadius="10" Padding="5">
-                    <Entry Text="{Binding Profile.Email}" 
-                           TextColor="Black" 
-                           FontSize="16"
-                           IsEnabled="{Binding IsEditing}" 
-                           BackgroundColor="#FFFFFF" 
-                           Placeholder="Enter your email" 
-                           PlaceholderColor="#757575"/>
-                </Frame>
-
-            </StackLayout>
-        </Frame>
-
-        <StackLayout Spacing="15">
-            <Button Text="Edit Profile" Command="{Binding ToggleEditCommand}" 
-                    BackgroundColor="#FF9800" TextColor="White" FontSize="18" 
-                    IsVisible="{Binding IsNotEditing}" CornerRadius="10"/>
-
-            <StackLayout Orientation="Horizontal" IsVisible="{Binding IsEditing}" Spacing="15">
-                <Button Text="Save" Command="{Binding SaveCommand}" 
-                        BackgroundColor="#4CAF50" TextColor="White" FontSize="18" 
-                        WidthRequest="150" CornerRadius="10"/>
-                <Button Text="Cancel" Command="{Binding CancelCommand}" 
-                        BackgroundColor="#D32F2F" TextColor="White" FontSize="18" 
-                        WidthRequest="150" CornerRadius="10"/>
+                <Button Text="Reset Password" Command="{Binding ResetPasswordCommand}" 
+                        BackgroundColor="#2196F3" TextColor="White" FontSize="18"
+                        CornerRadius="15" HeightRequest="50"/>
             </StackLayout>
 
-            <Button Text="Reset Password" Command="{Binding ResetPasswordCommand}" 
-                    BackgroundColor="#2196F3" TextColor="White" FontSize="18"
-                    CornerRadius="10"/>
         </StackLayout>
-
-    </StackLayout>
+    </ScrollView>
 </ContentPage>

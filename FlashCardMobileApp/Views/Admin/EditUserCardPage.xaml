@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:FlashCardMobileApp.ViewModels.Admin"
+             x:Class="FlashCardMobileApp.Views.Admin.EditUserCardPage">
+
+    <StackLayout Padding="20" Spacing="20">
+        <Label Text="Edit Flashcard" FontSize="24" FontAttributes="Bold"/>
+
+        <Picker Title="Select Category"
+                ItemsSource="{Binding Categories}"
+                ItemDisplayBinding="{Binding Name}"
+                SelectedItem="{Binding SelectedCategory}"
+                BackgroundColor="AliceBlue"
+                TitleColor="Gray"
+                TextColor="Black"/>
+
+        <Entry Placeholder="Enter Question" Text="{Binding Question}" FontSize="18" PlaceholderColor="Gray" TextColor="Black"/>
+
+        <Editor Placeholder="Enter Answer" Text="{Binding Answer}" FontSize="18" HeightRequest="100" PlaceholderColor="Gray" TextColor="Black"/>
+
+        <Button Text="Update Flashcard" Command="{Binding SaveCommand}" BackgroundColor="#1976D2" TextColor="White"/>
+
+        <Button Text="Cancel" Command="{Binding CancelCommand}" BackgroundColor="Gray" TextColor="White"/>
+    </StackLayout>
+</ContentPage>

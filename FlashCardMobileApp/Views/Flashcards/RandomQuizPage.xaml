@@ -10,7 +10,8 @@
                 ItemDisplayBinding="{Binding Name}" 
                 SelectedItem="{Binding SelectedCategory}"
                 Title="Select Category"
-                TitleColor="DimGray"/>
+                TitleColor="DimGray"
+                TextColor="Black"/>
 
         <Frame BackgroundColor="White" CornerRadius="10" Padding="20">
             <Label Text="{Binding CurrentFlashcard.Question}" 

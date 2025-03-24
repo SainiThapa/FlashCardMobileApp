@@ -7,15 +7,17 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
-namespace FlashCardMobileApp.ViewModels
+namespace FlashCardMobileApp.ViewModels.Admin
 {
-    public class EditFlashcardViewModel : BaseViewModel
+    public class EditUserCardViewModel : BaseViewModel
     {
         private readonly ApiService _apiService;
         public Flashcard Flashcard { get; set; }
         public ObservableCollection<Category> Categories { get; set; }
         private Category _selectedCategory;
-        private int _flashcardId;
+        public string Question { get; set; }
+        public string Answer { get; set; }
+        public int CategoryId { get; set; }
 
         public Category SelectedCategory
         {
@@ -30,7 +32,7 @@ namespace FlashCardMobileApp.ViewModels
         public ICommand SaveCommand { get; }
         public ICommand CancelCommand { get; }
 
-        public EditFlashcardViewModel()
+        public EditUserCardViewModel()
         {
             _apiService = new ApiService();
             Flashcard = new Flashcard();
@@ -40,11 +42,12 @@ namespace FlashCardMobileApp.ViewModels
             CancelCommand = new Command(async () => await Shell.Current.GoToAsync(".."));
         }
 
-        public async Task LoadFlashcardDetails(int flashcardId)
+        public async Task LoadFlashcardDetails(string userId, int flashcardId)
         {
             IsBusy = true;
             try
             {
+                // Load the categories
                 var categories = await _apiService.GetCategoriesAsync();
                 Categories.Clear();
                 foreach (var category in categories)
@@ -52,29 +55,23 @@ namespace FlashCardMobileApp.ViewModels
                     Categories.Add(category);
                 }
 
-                var flashcards = await _apiService.GetFlashcardsAsync();
-                if (flashcards == null || !flashcards.Any())
+                // Load the flashcard
+                var flashcard = await _apiService.GetFlashcardByIdAsync(flashcardId);
+                if (flashcard != null)
                 {
-                    await Application.Current.MainPage.DisplayAlert("Error", "No flashcards found from API.", "OK");
-                    return;
-                }
+                    Flashcard = flashcard;
 
-                var flashcardToEdit = flashcards?.FirstOrDefault(f => f.Id == flashcardId);
-                if (flashcardToEdit == null)
+                    // Find the selected category
+                    SelectedCategory = Categories.FirstOrDefault(c => c.Id == Flashcard.CategoryId);
+
+                    // Update bindings
+                    OnPropertyChanged(nameof(Flashcard));
+                    OnPropertyChanged(nameof(SelectedCategory));
+                }
+                else
                 {
-                    string ids = string.Join(", ", flashcards.Select(f => f.Id)); // Get list of IDs returned
-                    await Application.Current.MainPage.DisplayAlert("Error", $"Flashcard ID {flashcardId} not found. Available IDs: {ids}", "OK");
-                    return;
+                    await Application.Current.MainPage.DisplayAlert("Error", "Flashcard not found.", "OK");
                 }
-
-                Flashcard = flashcardToEdit;
-
-                // Find and select the correct category based on CategoryId
-                SelectedCategory = Categories.FirstOrDefault(c => c.Id == flashcardToEdit.CategoryId);
-
-                // Update bindings
-                OnPropertyChanged(nameof(Flashcard));
-                OnPropertyChanged(nameof(SelectedCategory));
             }
             catch (Exception ex)
             {
@@ -96,13 +93,21 @@ namespace FlashCardMobileApp.ViewModels
 
             try
             {
+                Flashcard.Question = Question;  // Update with the new Question from the UI
+                Flashcard.Answer = Answer;      // Update with the new Answer from the UI
                 Flashcard.CategoryId = SelectedCategory.Id;
 
-                var success = await _apiService.UpdateFlashcardAsync(Flashcard);
+                var model = new UpdateFlashCardViewModel
+                {
+                    Question = Flashcard.Question,
+                    Answer = Flashcard.Answer,
+                    CategoryId = Flashcard.CategoryId
+                };
+
+                var success = await _apiService.UpdateUserFlashcardAsync(Flashcard.UserId, Flashcard.Id, model);
                 if (success)
                 {
                     await Application.Current.MainPage.DisplayAlert("Success", "Flashcard updated successfully!", "OK");
-                    MessagingCenter.Send(this, "FlashcardUpdated");
                     await Shell.Current.GoToAsync("..");
                 }
                 else
@@ -115,6 +120,12 @@ namespace FlashCardMobileApp.ViewModels
                 await Application.Current.MainPage.DisplayAlert("Error", $"An error occurred: {ex.Message}", "OK");
             }
         }
-
     }
+    public class UpdateFlashCardViewModel
+    {
+        public string Question { get; set; }
+        public string Answer { get; set; }
+        public int CategoryId { get; set; }
+    }
+
 }

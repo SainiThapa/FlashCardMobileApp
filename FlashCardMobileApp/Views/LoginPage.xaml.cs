@@ -7,6 +7,7 @@ namespace FlashCardMobileApp.Views
     public partial class LoginPage : ContentPage
     {
         public ICommand RegisterCommand => new Command(async () => await Shell.Current.GoToAsync("//RegisterPage"));
+        public ICommand ForgotPasswordCommand => new Command(async () => Application.Current.MainPage.Navigation.PushAsync(new ForgotPasswordPage()));
 
         public LoginPage()
         {

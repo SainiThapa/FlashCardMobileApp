@@ -1,52 +1,42 @@
 ﻿using FlashCardMobileApp.Models;
 using FlashCardMobileApp.Services;
-using FlashCardMobileApp.Views.Flashcards;
 using System;
 using System.Collections.ObjectModel;
-using System.Linq;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
-namespace FlashCardMobileApp.ViewModels
+namespace FlashCardMobileApp.ViewModels.Admin
 {
-    public class CreateFlashcardViewModel : BaseViewModel
+    public class CreateUserCardViewModel : BaseViewModel
     {
         private readonly ApiService _apiService;
-        public Flashcard Flashcard { get; set; }
-        
+        private readonly string _userId;
+
+        public ObservableCollection<Category> Categories { get; set; }
+        public Category SelectedCategory { get; set; }
         public string Question { get; set; }
         public string Answer { get; set; }
-        public string CategoryId { get; set; }
-        public ObservableCollection<Category> Categories { get; set; }
-        private Category _selectedCategory;
-
-        public Category SelectedCategory
-        {
-            get => _selectedCategory;
-            set
-            {
-                _selectedCategory = value;
-                OnPropertyChanged();
-            }
-        }
+        public int CategoryId => SelectedCategory?.Id ?? 0;
 
         public ICommand SaveCommand { get; }
         public ICommand CancelCommand { get; }
 
-        public CreateFlashcardViewModel()
+        public CreateUserCardViewModel(string userId)
         {
             _apiService = new ApiService();
-            Flashcard = new Flashcard();
+            _userId = userId;
             Categories = new ObservableCollection<Category>();
 
-            SaveCommand = new Command(async () => await SaveFlashcard());
+            SaveCommand = new Command(async () => await CreateFlashcardAsync());
             CancelCommand = new Command(async () => await Shell.Current.GoToAsync(".."));
+
+            LoadCategories();
         }
 
-        public async Task LoadCategories()
+        private async Task LoadCategories()
         {
-            IsBusy = true;
             try
             {
                 var categories = await _apiService.GetCategoriesAsync();
@@ -60,36 +50,31 @@ namespace FlashCardMobileApp.ViewModels
             {
                 await Application.Current.MainPage.DisplayAlert("Error", $"Failed to load categories: {ex.Message}", "OK");
             }
-            finally
-            {
-                IsBusy = false;
-            }
         }
 
-        private async Task SaveFlashcard()
+        private async Task CreateFlashcardAsync()
         {
-            if (SelectedCategory == null)
+            if (SelectedCategory == null || string.IsNullOrWhiteSpace(Question) || string.IsNullOrWhiteSpace(Answer))
             {
-                await Application.Current.MainPage.DisplayAlert("Error", "Please select a category.", "OK");
+                await Application.Current.MainPage.DisplayAlert("Error", "Please fill in all fields.", "OK");
                 return;
             }
 
             try
             {
-                var userId = await _apiService.GetUserIdAsync();
-                var flashcardToSave = new
+                var createModel = new CreateUserCardViewModel(_userId)
                 {
-                    CategoryId = SelectedCategory.Id,
-                    Question = Flashcard.Question,
-                    Answer = Flashcard.Answer,
-                    UserId = userId
+                    SelectedCategory = SelectedCategory,
+                    Question = Question,
+                    Answer = Answer
                 };
 
-                var success = await _apiService.AddFlashcardAsync(flashcardToSave);
+                var success = await _apiService.CreateFlashcardAsync(_userId, createModel);
                 if (success)
                 {
                     await Application.Current.MainPage.DisplayAlert("Success", "Flashcard created successfully!", "OK");
-                    await Application.Current.MainPage.Navigation.PushAsync(new YourFlashCardsPage());
+                    MessagingCenter.Send(this, "FlashcardCreated");
+                    await Shell.Current.GoToAsync("..");
                 }
                 else
                 {

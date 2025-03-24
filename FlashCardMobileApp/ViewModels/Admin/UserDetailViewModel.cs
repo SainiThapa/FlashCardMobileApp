@@ -1,4 +1,5 @@
-﻿using FlashCardMobileApp.Services;
+﻿using FlashCardMobileApp.Models;
+using FlashCardMobileApp.Services;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -63,28 +65,38 @@ namespace FlashCardMobileApp.ViewModels.Admin
 
             DeleteSelectedFlashcardsCommand = new Command(DeleteSelectedFlashcards);
         }
-        public async void LoadUserDetails(string userId)
+        public async Task LoadUserDetails(string userId)
         {
+            IsBusy = true;
+            try
+            {
+
             var userDetails = await _apiService.GetUserDetailAsync(userId);
-            Debug.WriteLine($"User detail is loaded as: {JsonConvert.SerializeObject(userDetails, Formatting.Indented)}");
+
             if (userDetails != null)
             {
                 FirstName = userDetails.FirstName;
                 LastName = userDetails.LastName;
                 Email = userDetails.Email;
 
-                // Map API Flashcards to ViewModel
+                // Clear the existing list before adding new items
+                Flashcards.Clear();
                 foreach (var flashcard in userDetails.Flashcards)
                 {
-                    Flashcards.Add(new UserFlashcardViewModel
-                    {
-                        Id = flashcard.Id,
-                        Question = flashcard.Question,
-                        Answer = flashcard.Answer,
-                        CategoryName = flashcard.CategoryName
-                    });
+                    Flashcards.Add(flashcard);
                 }
-            Debug.WriteLine($"FullName: {userDetails.FullName}");
+
+                // Notify the UI that data has been loaded successfully
+                OnPropertyChanged(nameof(Flashcards));
+            }
+            }
+            catch(Exception e)
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", $"Failed to load user details: {e.Message}", "OK");
+            }
+            finally
+            {
+                IsBusy = false;
             }
         }
         private async void DeleteSelectedFlashcards()

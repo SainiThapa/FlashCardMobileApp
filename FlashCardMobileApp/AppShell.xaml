@@ -52,6 +52,7 @@
     <ShellContent Route="AdminUsersPage" ContentTemplate="{DataTemplate adminViews:AdminUsersPage}" />
     <ShellContent Route="AdminResetPasswordsPage" ContentTemplate="{DataTemplate adminViews:AdminResetPasswordsPage}" />
     <ShellContent Route="AdminViewUserPage" ContentTemplate="{DataTemplate adminViews:AdminViewUserPage}" />
+    <ShellContent Title="Forgot Password" ContentTemplate="{DataTemplate views:ForgotPasswordPage}"/>
 
 
 </Shell>

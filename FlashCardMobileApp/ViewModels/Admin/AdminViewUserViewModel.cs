@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using FlashCardMobileApp.Services;
+using System;
 
 namespace FlashCardMobileApp.ViewModels.Admin
 {
@@ -22,6 +23,10 @@ namespace FlashCardMobileApp.ViewModels.Admin
 
         public async Task LoadUserDetails(string userId)
         {
+            IsBusy = true;
+            try
+            {
+
             UserId = userId;
             var userDetails = await _apiService.GetUserDetailAsync(userId);
 
@@ -34,6 +39,16 @@ namespace FlashCardMobileApp.ViewModels.Admin
                 Flashcards.Clear();
                 foreach (var flashcard in userDetails.Flashcards)
                     Flashcards.Add(flashcard);
+            }
+            }
+            catch(Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", $"Failed to load user details: {ex.Message}", "OK");
+
+            }
+            finally
+            {
+                IsBusy = false; 
             }
         }
     }

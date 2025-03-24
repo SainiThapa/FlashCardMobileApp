@@ -24,7 +24,6 @@ public class AuthenticationService
         {
             var result = JsonConvert.DeserializeObject<Dictionary<string, string>>(await response.Content.ReadAsStringAsync());
             string token = result["token"];
-
             await SecureStorage.SetAsync(TokenKey, token);
             await SecureStorage.SetAsync(EmailKey, email);
             Debug.WriteLine("Stored Token: " + token);

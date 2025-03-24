@@ -33,6 +33,12 @@
                 </Label.GestureRecognizers>
             </Label>
         </StackLayout>
-
+        <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+            <Label Text="Forgot Password?" TextColor="#FF6F61" FontAttributes="Bold" FontSize="14">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding ForgotPasswordCommand}" />
+                </Label.GestureRecognizers>
+            </Label>
+        </StackLayout>
     </StackLayout>
 </ContentPage>

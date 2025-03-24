@@ -45,15 +45,20 @@ namespace FlashCardMobileApp.Services
             if (url.StartsWith("Adminapi", StringComparison.OrdinalIgnoreCase) || url.Contains("admin"))
             {
                 token = await SecureStorage.GetAsync("admin_auth_token");
+                Debug.WriteLine("Admin token retrieved: " + token);
+
             }
             else
             {
-                token = await SecureStorage.GetAsync("auth_token");
+                token = await SecureStorage.GetAsync("AuthToken");
+                Debug.WriteLine("User token retrieved: " + token);
             }
 
-            Debug.WriteLine("TOKEN GENERATED : " + token);
             if (string.IsNullOrEmpty(token))
+            {
+                Debug.WriteLine("Token not found: ");
                 throw new UnauthorizedAccessException("User is not authenticated.");
+            }    
 
             var request = new HttpRequestMessage(method, url);
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -145,9 +150,34 @@ namespace FlashCardMobileApp.Services
         {
             try
             {
-                var request = await CreateAuthenticatedRequest(HttpMethod.Put, "AccountApi/updateProfile", profile);
+                var requestdata = new
+                {
+                    Email = profile.Email,
+                    Username = profile.Username
+                };                
+                var requestUrl = $"Accountapi/users/update";
+                var json = JsonConvert.SerializeObject(requestdata);
+                Debug.WriteLine($"JSON DATA {json}");
+
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                Debug.WriteLine("[Content Created] Successfully created JSON content.");
+
+                var request = await CreateAuthenticatedRequest(HttpMethod.Put, requestUrl);
+                Debug.WriteLine("[Authenticated Request] Request created successfully.");
+
+
+                request.Content = content;
+                Debug.WriteLine("[Request] Content assigned to request.");
+
                 var response = await _httpClient.SendAsync(request);
-                return response.IsSuccessStatusCode;
+                Debug.WriteLine($"[Response Status] {response.StatusCode}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    Debug.WriteLine("Profile updated successfully");
+                    return true;
+                }
+                return false;
             }
             catch (Exception ex)
             {
@@ -241,7 +271,7 @@ namespace FlashCardMobileApp.Services
         {
             try
             {
-                var request = await CreateAuthenticatedRequest(HttpMethod.Get, "adminapi/categories");
+                var request = await CreateAuthenticatedRequest(HttpMethod.Get, "Flashcardapi/categories");
                 var response = await _httpClient.SendAsync(request);
                 response.EnsureSuccessStatusCode();
 
@@ -389,6 +419,14 @@ namespace FlashCardMobileApp.Services
             Debug.WriteLine($"Is Token Valid: {isValid}");
         }
 
+        public async Task<bool> ForgotPasswordAsync(ForgotPasswordViewModel model)
+        {
+            var json = JsonConvert.SerializeObject(model);
+            var requestUrl = "accountapi/forgot-password";
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await _httpClient.PostAsync(requestUrl, content);
+            return response.IsSuccessStatusCode;
+        }
         public async Task<List<UserViewModel>> GetUsersAsync()
         {
             Debug.WriteLine("Called the getusersasync method");
@@ -551,7 +589,7 @@ namespace FlashCardMobileApp.Services
             }
         }
 
-        public async Task<List<Flashcard>> GetUserFlashcardsAsync(string userId)
+        public async Task<List<Flashcard>> GetUserFlashcardAsync(string userId, int flashcardId)
         {
             try
             {
@@ -577,35 +615,96 @@ namespace FlashCardMobileApp.Services
             }
         }
 
-        public async Task<bool> CreateFlashcardAsync(string userId, CreateFlashcardViewModel model)
+        public async Task<bool> CreateFlashcardAsync(string userId, CreateUserCardViewModel model)
         {
             try
             {
                 var requestUrl = $"adminapi/users/{userId}/flashcards";
-                var request = await CreateAuthenticatedRequest(HttpMethod.Post, requestUrl, model);
+
+                var requestData = new
+                {
+                    Question = model.Question,
+                    Answer = model.Answer,
+                    CategoryId = model.SelectedCategory.Id
+                };
+                var json = JsonConvert.SerializeObject(requestData);
+                Debug.WriteLine($"[CreateFlashcardAsync] Sending Data: {json}");
+
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var request = await CreateAuthenticatedRequest(HttpMethod.Post, requestUrl);
+                request.Content = content;
+
                 var response = await _httpClient.SendAsync(request);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorResponse = await response.Content.ReadAsStringAsync();
+                    Debug.WriteLine($"[CreateFlashcardAsync] Error Response: {errorResponse}");
+                }
+
                 return response.IsSuccessStatusCode;
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Exception in CreateFlashcardAsync: {ex.Message}");
+                Debug.WriteLine($"[CreateFlashcardAsync] Exception: {ex.Message}");
+                if (ex.InnerException != null)
+                {
+                    Debug.WriteLine($"[CreateFlashcardAsync] Inner Exception: {ex.InnerException.Message}");
+                }
                 return false;
             }
         }
 
-        public async Task<bool> UpdateFlashcardAsync(string userId, int flashcardId, EditFlashcardViewModel model)
+        public async Task<bool> UpdateUserFlashcardAsync(string userId, int flashcardId, UpdateFlashCardViewModel model)
         {
             try
             {
                 var requestUrl = $"adminapi/users/{userId}/flashcards/{flashcardId}";
+
                 var request = await CreateAuthenticatedRequest(HttpMethod.Put, requestUrl, model);
+
+                var requestData = new
+                {
+                    Question = model.Question,
+                    Answer = model.Answer,
+                    CategoryId = model.CategoryId
+                };
+                var json = JsonConvert.SerializeObject(requestData);
+                Debug.WriteLine($"[CreateFlashcardAsync] Sending Data:{userId} : {json}");
+
                 var response = await _httpClient.SendAsync(request);
+
                 return response.IsSuccessStatusCode;
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Exception in UpdateFlashcardAsync: {ex.Message}");
+                Debug.WriteLine($"[UpdateUserFlashcardAsync] Exception: {ex.Message}");
                 return false;
+            }
+        }
+        public async Task<Flashcard> GetFlashcardByIdAsync(int flashcardId)
+        {
+            try
+            {
+                var requestUrl = $"adminapi/users/flashcards/{flashcardId}";
+
+                var request = await CreateAuthenticatedRequest(HttpMethod.Get, requestUrl);
+
+                var response = await _httpClient.SendAsync(request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject<Flashcard>(content);
+                }
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[GetFlashcardByIdAsync] Error: {ex.Message}");
+                return null;
             }
         }
 
