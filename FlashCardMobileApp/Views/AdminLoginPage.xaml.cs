@@ -19,6 +19,18 @@ namespace FlashCardMobileApp.Views
             string email = AdminEmailEntry.Text;
             string password = AdminPasswordEntry.Text;
 
+            if (string.IsNullOrEmpty(email))
+            {
+                await DisplayAlert("Validation Error", "You can't leave the email field empty.", "OK");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(password))
+            {
+                await DisplayAlert("Validation Error", "You can't leave the password field empty.", "OK");
+                return;
+            }
+
             bool success = await apiService.AdminLoginAsync(email, password);
             if (success)
             {

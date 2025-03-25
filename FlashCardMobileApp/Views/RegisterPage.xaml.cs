@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Newtonsoft.Json;
@@ -21,12 +22,39 @@ namespace FlashCardMobileApp.Views
         private async void OnRegisterClicked(object sender, EventArgs e)
         {
             // Validate input
-            if (string.IsNullOrWhiteSpace(FirstNameEntry.Text) ||
-                string.IsNullOrWhiteSpace(LastNameEntry.Text) ||
-                string.IsNullOrWhiteSpace(EmailEntry.Text) ||
-                string.IsNullOrWhiteSpace(PasswordEntry.Text))
+            if (string.IsNullOrWhiteSpace(FirstNameEntry.Text))
             {
-                await DisplayAlert("Error", "All fields are required.", "OK");
+                await DisplayAlert("Validation Error", "First Name is required.", "OK");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(LastNameEntry.Text))
+            {
+                await DisplayAlert("Validation Error", "Last Name is required.", "OK");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(EmailEntry.Text))
+            {
+                await DisplayAlert("Validation Error", "Email is required.", "OK");
+                return;
+            }
+
+            if (!Regex.IsMatch(EmailEntry.Text, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+            {
+                await DisplayAlert("Validation Error", "Email should end with @<mailservice>.com.", "OK");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(PasswordEntry.Text))
+            {
+                await DisplayAlert("Validation Error", "Password is required.", "OK");
+                return;
+            }
+
+            if (!Regex.IsMatch(PasswordEntry.Text, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"))
+            {
+                await DisplayAlert("Validation Error", "Password must contain at least 8 characters with uppercase, lowercase letters, numbers, and special symbols.", "OK");
                 return;
             }
 
@@ -51,7 +79,6 @@ namespace FlashCardMobileApp.Views
                 await DisplayAlert("Error", "Registration failed. Email may already be in use.", "OK");
             }
         }
-
         private async Task<bool> RegisterAsync(string firstName, string lastName, string email, string password)
         {
             try
